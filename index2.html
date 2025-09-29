@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歡修行刮刮樂 (4x4)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 600px; /* 稍微加寬以容納4x4 */
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .scratch-card {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* --- 修改處：3改為4 --- */
+            gap: 10px;
+            margin: 30px auto;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .scratch-cell {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: crosshair;
+            border: 2px solid #fff;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .prize-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .scratch-surface {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #C0C0C0, #808080);
+            z-index: 10;
+            cursor: crosshair;
+        }
+
+        .scratch-surface::before {
+            content: "刮";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+
+        .controls {
+            margin-top: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            min-height: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .result-main {
+            font-size: 1em;
+            color: #333;
+            text-align: center;
+        }
+
+        .result-sub {
+            font-size: 0.7em;
+            color: #666;
+            text-align: center;
+            padding-top: 5px;
+        }
+
+        .win {
+            color: #FF6B6B;
+            animation: pulse 1s infinite;
+        }
+
+        .lose {
+            color: #666;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .instructions {
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .prize-amounts {
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        /* 大乘之道抽籤視窗 */
+        .mahayana-modal {
+            z-index: 2000;
+        }
+
+        /* 法母十七訓視窗 */
+        .chance-modal {
+            z-index: 2100;
+        }
+
+        .chance-modal .modal-content {
+            border: 3px solid #27ae60;
+            box-shadow: 0 20px 60px rgba(39, 174, 96, 0.3);
+        }
+
+        .chance-modal .modal-header {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            margin: -30px -30px 20px -30px;
+            padding: 20px 30px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+
+        .chance-modal .modal-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .chance-modal .modal-body {
+            line-height: 1.6;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .chance-modal .modal-body #chanceMessage {
+            font-style: italic;
+            color: #2c3e50;
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+            margin-bottom: 15px;
+        }
+
+        .chance-modal .encouragement {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 8px;
+            color: #27ae60;
+            font-weight: bold;
+            border: 2px solid #27ae60;
+        }
+
+        .chance-modal .btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            margin-top: 20px;
+        }
+
+        /* 拔苦代受靈訓視窗 */
+        .destiny-modal {
+            z-index: 2100;
+        }
+
+        .destiny-modal .modal-content {
+            border: 3px solid #8e44ad;
+            box-shadow: 0 20px 60px rgba(142, 68, 173, 0.3);
+        }
+
+        .destiny-modal .modal-header {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            margin: -30px -30px 20px -30px;
+            padding: 20px 30px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+
+        .destiny-modal .modal-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .destiny-modal .modal-body {
+            line-height: 1.6;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .destiny-modal .modal-body #destinyMessage {
+            font-style: italic;
+            color: #2c3e50;
+            background: #f4f1f8;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #8e44ad;
+            margin-bottom: 15px;
+        }
+
+        .destiny-modal .encouragement {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 8px;
+            color: #8e44ad;
+            font-weight: bold;
+            border: 2px solid #8e44ad;
+        }
+
+        .destiny-modal .btn {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            margin-top: 20px;
+        }
+
+        /* 苑史抽籤視窗 */
+        .history-modal {
+            z-index: 2200;
+        }
+
+        .history-modal .modal-content {
+            border: 3px solid #e74c3c;
+            box-shadow: 0 20px 60px rgba(231, 76, 60, 0.3);
+            max-width: 600px;
+            width: 95%;
+        }
+
+        .history-modal .modal-header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            margin: -30px -30px 20px -30px;
+            padding: 20px 30px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+
+        .history-modal .modal-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .history-modal .modal-body {
+            line-height: 1.6;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .history-modal .modal-body #historyMessage {
+            color: #2c3e50;
+            background: #fff5f5;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .history-modal .encouragement {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 8px;
+            color: #e74c3c;
+            font-weight: bold;
+            border: 2px solid #e74c3c;
+        }
+
+        .history-modal .btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            margin-top: 20px;
+        }
+
+        .mahayana-modal .modal-content {
+            border: 3px solid #d35400;
+            box-shadow: 0 20px 60px rgba(211, 84, 0, 0.3);
+        }
+
+        .mahayana-modal .modal-header {
+            background: linear-gradient(135deg, #d35400, #e67e22);
+            color: white;
+            margin: -30px -30px 20px -30px;
+            padding: 20px 30px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+
+        .mahayana-modal .modal-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .mahayana-modal .modal-body {
+            line-height: 1.6;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .mahayana-modal .modal-body hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 2px solid #ecf0f1;
+        }
+
+        .mahayana-modal .modal-body #mahayanaMessage {
+            font-style: italic;
+            color: #2c3e50;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #d35400;
+        }
+
+        .mahayana-modal .btn {
+            background: linear-gradient(135deg, #d35400, #e67e22);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>歡修行刮刮樂</h1>
+        
+        <div class="prize-amounts">
+            <div>📅 0328</div>
+            <div>📅 0509</div>
+            <div>📅 0806</div>
+            <div>📅 0719</div>
+            <div>📅 0408</div>
+            <div>📅 0702</div>
+            <div>📅 0609</div>
+            <div></div>
+            <div></div>
+        </div>
+        
+        <div class="scratch-card" id="scratchCard">
+            <!-- 16宮格將由JavaScript生成 -->
+        </div>
+
+        <div class="result" id="result">
+            用滑鼠刮開格子，看看你的幸運數字！
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="resetGame()">🎲 重新開始</button>
+            <button class="btn" onclick="revealAll()">👁️ 全部顯示</button>
+        </div>
+
+        <div class="instructions">
+            <p>🎯 遊戲規則：必須刮滿8個格子才開獎</p> <!-- --- 修改處：6改為8 --- -->
+            <p>🏆 三個相同數字：法母十七訓</p>
+            <p>💫 四個相同數字：拔苦代受靈訓（大獎）</p>
+            <p>📜 五個以上相同：苑史抽籤（超級大獎）</p>
+            <p>💡 點擊格子即可刮開</p>
+            <p>🎲 沒中獎可重新開始或查看全部</p>
+        </div>
+    </div>
+
+    <!-- 法母十七訓Modal -->
+    <div id="chanceModal" class="modal chance-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💫 法母十七訓</h3>
+            </div>
+            <div class="modal-body">
+                <div id="chanceMessage">
+                    正在獲取法母指引...
+                </div>
+                <div class="encouragement">
+                    🌟 恭喜中獎！今天就朝向這個美好的方向邁進吧！
+                </div>
+            </div>
+            <button class="btn" onclick="closeChanceModal()">
+                感恩接受
+            </button>
+        </div>
+    </div>
+
+    <!-- 拔苦代受靈訓Modal -->
+    <div id="destinyModal" class="modal destiny-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💜 拔苦代受靈訓</h3>
+            </div>
+            <div class="modal-body">
+                <div id="destinyMessage">
+                    正在獲取靈性指引...
+                </div>
+                <div class="encouragement">
+                    ✨ 中獎是福報的體現！讓我們以這份指引開啟美好的一天！
+                </div>
+            </div>
+            <button class="btn" onclick="closeDestinyModal()">
+                感恩接受
+            </button>
+        </div>
+    </div>
+
+    <!-- 苑史抽籤Modal -->
+    <div id="historyModal" class="modal history-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📜 苑史抽籤</h3>
+            </div>
+            <div class="modal-body">
+                <div id="historyMessage">
+                    正在時光機中穿梭，尋找歷史記憶...
+                </div>
+                <div class="encouragement">
+                    🌟 超級大獎！歷史的智慧為您點亮前路！
+                </div>
+            </div>
+            <button class="btn" onclick="closeHistoryModal()">
+                感恩歷史
+            </button>
+        </div>
+    </div>
+
+    <!-- 大乘之道抽籤Modal -->
+    <div id="mahayanaModal" class="modal mahayana-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📿 大乘之道</h3>
+            </div>
+            <div class="modal-body">
+                <p style="font-weight: bold; color: #d35400; font-size: 1.2em; margin-bottom: 15px;">
+                    您的功德累積不足，請作大乘利他之修行
+                </p>
+                <hr>
+                <div id="mahayanaMessage">
+                    正在獲取修行指引...
+                </div>
+            </div>
+            <button class="btn" onclick="closeMahayanaModal()">
+                遵循教誨
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 數字池
+        const numberPool = ["0328", "0509", "0806", "0719", "0408", "0702", "0609"];
+        
+        // 抽籤資料來源
+        const motherMessagesSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSEWDc6xiRT1fIynaHGScq18jeolq6GNp4Xdyp-UtH7BfG198FTeSBMC3_WImR8ZFqZCHX4r7hQf0UW/pub?gid=0&single=true&output=csv';
+        const bakudaishouSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTQp08ZcC5kK1DRs8jE0FYXwmFLh5wXTxJZgdjuOK8s_UIcovZaqKqJhRIAa-Qz3yh5O80cs55euiKp/pub?gid=0&single=true&output=csv';
+        const mahayanaSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
+        const historySheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSELNOgRozrKO1bscsHe6doF8rH9-wSPYgvkhR5xXGhHKYvKoiXnlEC8YR3G5pPwQ2YFOksnlxYAQx-/pub?gid=0&single=true&output=csv';
+        
+        let motherMessagesData = [];
+        let bakudaishouData = [];
+        let mahayanaData = [];
+        let historyData = [];
+
+        // --- 修改處：遊戲參數 ---
+        const GRID_SIZE = 16;
+        const MAX_SCRATCH = 8;
+
+        let gameData = {
+            prizes: [],
+            scratchedCells: [],
+            gameOver: false,
+            scratchCount: 0,
+            maxScratch: MAX_SCRATCH
+        };
+
+        function initGame() {
+            // 重置遊戲狀態
+            gameData = {
+                prizes: [],
+                scratchedCells: new Array(GRID_SIZE).fill(false), // 使用GRID_SIZE
+                gameOver: false,
+                scratchCount: 0,
+                maxScratch: MAX_SCRATCH // 使用MAX_SCRATCH
+            };
+
+            // 生成獎金
+            generatePrizes();
+            
+            // 創建宮格
+            createScratchCard();
+            
+            // 重置結果顯示
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = `
+                <div class="result-main">點擊格子，看看你的幸運數字！</div>
+                <div class="result-sub">剩餘刮獎次數：${gameData.maxScratch}</div>
+            `;
+            resultElement.className = 'result';
+        }
+
+        function generatePrizes() {
+            // 提高中獎機率
+            const winChance = Math.random();
+            
+            if (winChance < 0.65) {
+                // 65% 機率獲得三個相同（法母十七訓）
+                const winNumber = numberPool[Math.floor(Math.random() * numberPool.length)];
+                const positions = getRandomPositions(3);
+                
+                for (let i = 0; i < GRID_SIZE; i++) { // --- 修改處：9改為GRID_SIZE ---
+                    if (positions.includes(i)) {
+                        gameData.prizes[i] = winNumber;
+                    } else {
+                        gameData.prizes[i] = numberPool[Math.floor(Math.random() * numberPool.length)];
+                    }
+                }
+            } else if (winChance < 0.95) {
+                // 30% 機率獲得四個相同（拔苦代受靈訓）- 大幅提升！
+                const winNumber = numberPool[Math.floor(Math.random() * numberPool.length)];
+                const positions = getRandomPositions(4);
+                
+                for (let i = 0; i < GRID_SIZE; i++) { // --- 修改處：9改為GRID_SIZE ---
+                    if (positions.includes(i)) {
+                        gameData.prizes[i] = winNumber;
+                    } else {
+                        gameData.prizes[i] = numberPool[Math.floor(Math.random() * numberPool.length)];
+                    }
+                }
+            } else {
+                // 僅5% 機率不中獎（觸發大乘之道）
+                for (let i = 0; i < GRID_SIZE; i++) { // --- 修改處：9改為GRID_SIZE ---
+                    gameData.prizes[i] = numberPool[Math.floor(Math.random() * numberPool.length)];
+                }
+            }
+        }
+
+        function getRandomPositions(count) {
+            const positions = [];
+            while (positions.length < count) {
+                const pos = Math.floor(Math.random() * GRID_SIZE); // --- 修改處：9改為GRID_SIZE ---
+                if (!positions.includes(pos)) {
+                    positions.push(pos);
+                }
+            }
+            return positions;
+        }
+
+        function createScratchCard() {
+            const card = document.getElementById('scratchCard');
+            card.innerHTML = '';
+
+            for (let i = 0; i < GRID_SIZE; i++) { // --- 修改處：9改為GRID_SIZE ---
+                const cell = document.createElement('div');
+                cell.className = 'scratch-cell';
+                cell.dataset.index = i;
+
+                const prizeContent = document.createElement('div');
+                prizeContent.className = 'prize-content';
+                prizeContent.style.background = getPrizeColor(gameData.prizes[i]);
+                prizeContent.textContent = gameData.prizes[i];
+
+                const scratchSurface = document.createElement('div');
+                scratchSurface.className = 'scratch-surface';
+
+                cell.appendChild(prizeContent);
+                cell.appendChild(scratchSurface);
+                card.appendChild(cell);
+
+                // 添加刮獎事件
+                addScratchEvents(cell, i);
+            }
+        }
+
+        function getPrizeColor(number) {
+            // 根據不同數字給予不同顏色
+            const colorMap = {
+                "0328": 'linear-gradient(45deg, #FF6B6B, #FF8E8E)',
+                "0509": 'linear-gradient(45deg, #4ECDC4, #7FDBDA)', 
+                "0806": 'linear-gradient(45deg, #95E1D3, #B8E6D9)',
+                "0719": 'linear-gradient(45deg, #FFD93D, #FFE55C)',
+                "0408": 'linear-gradient(45deg, #A8E6CF, #C4F2E0)',
+                "0702": 'linear-gradient(45deg, #FFB3BA, #FFC9CE)',
+                "0609": 'linear-gradient(45deg, #C7CEEA, #E0E6FF)'
+            };
+            return colorMap[number] || 'linear-gradient(45deg, #D3D3D3, #E8E8E8)';
+        }
+
+        function addScratchEvents(cell, index) {
+            const surface = cell.querySelector('.scratch-surface');
+
+            // 檢查是否還能刮獎
+            function canScratch() {
+                return gameData.scratchCount < gameData.maxScratch && !gameData.scratchedCells[index] && !gameData.gameOver;
+            }
+
+            // 滑鼠點擊事件 - 點擊一下即可刮開
+            surface.addEventListener('click', (e) => {
+                if (!canScratch()) return;
+                e.preventDefault();
+                scratchCell(surface, index);
+            });
+
+            // 觸控點擊事件
+            surface.addEventListener('touchstart', (e) => {
+                if (!canScratch()) return;
+                e.preventDefault();
+                scratchCell(surface, index);
+            });
+        }
+        
+        function scratchCell(surface, index) {
+            if (gameData.scratchedCells[index]) return;
+
+            gameData.scratchedCells[index] = true;
+            gameData.scratchCount++;
+            
+            updateScratchCounter();
+
+            surface.style.transition = 'opacity 0.8s ease-out';
+            surface.style.opacity = '0';
+            
+            setTimeout(() => {
+                surface.style.display = 'none';
+            }, 800);
+
+            checkWinCondition();
+        }
+
+        function updateScratchCounter() {
+            const remaining = gameData.maxScratch - gameData.scratchCount;
+            const result = document.getElementById('result');
+            
+            if (remaining > 0 && !gameData.gameOver) {
+                result.innerHTML = `
+                    <div class="result-main">繼續刮獎！</div>
+                    <div class="result-sub">剩餘刮獎次數：${remaining}</div>
+                `;
+            } else if (remaining === 0 && !gameData.gameOver) {
+                result.innerHTML = `
+                    <div class="result-main">已刮滿${gameData.maxScratch}個格子，開始開獎！</div>
+                    <div class="result-sub">正在檢查中獎結果...</div>
+                `;
+            }
+        }
+
+        function checkWinCondition() {
+            if (gameData.scratchCount < gameData.maxScratch) {
+                return; 
+            }
+
+            gameData.gameOver = true; 
+
+            const amounts = {};
+            gameData.prizes.forEach((prize, index) => {
+                if (gameData.scratchedCells[index]) {
+                    amounts[prize] = (amounts[prize] || 0) + 1;
+                }
+            });
+
+            let maxCount = 0;
+            let winningNumber = "";
+            
+            for (const [number, count] of Object.entries(amounts)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    winningNumber = number;
+                }
+            }
+
+            if (maxCount >= 5) {
+                setTimeout(() => {
+                    showResult(`🎉 超級大獎！${maxCount}個 ${winningNumber} 🎉`, 'win');
+                    setTimeout(() => {
+                        showHistoryModal();
+                    }, 1500);
+                }, 1000);
+                return;
+            } else if (maxCount >= 4) {
+                setTimeout(() => {
+                    showResult(`🎉 大獎！四個 ${winningNumber} 🎉`, 'win');
+                    setTimeout(() => {
+                        showDestinyModal();
+                    }, 1500);
+                }, 1000);
+                return;
+            } else if (maxCount >= 3) {
+                setTimeout(() => {
+                    showResult(`🎉 恭喜中獎！三個 ${winningNumber} 🎉`, 'win');
+                    setTimeout(() => {
+                        showChanceModal();
+                    }, 1500);
+                }, 1000);
+                return;
+            } else {
+                setTimeout(() => {
+                    showResult('您的功德累積不足，請作大乘利他之修行', 'lose');
+                    updateControls();
+                    setTimeout(() => {
+                        showMahayanaModal();
+                    }, 800);
+                }, 1000);
+            }
+        }
+
+        function updateControls() {
+            const controls = document.querySelector('.controls');
+            controls.innerHTML = `
+                <button class="btn" onclick="resetGame()">🎲 重新開始</button>
+                <button class="btn" onclick="revealAll()">👁️ 全部顯示</button>
+            `;
+        }
+
+        function showResult(message, className) {
+            const result = document.getElementById('result');
+            result.innerHTML = `<div class="result-main">${message}</div>`;
+            result.className = `result ${className}`;
+        }
+
+        function resetGame() {
+            initGame();
+        }
+
+        function revealAll() {
+            const surfaces = document.querySelectorAll('.scratch-surface');
+            surfaces.forEach((surface, index) => {
+                surface.style.transition = 'opacity 0.5s ease-out';
+                surface.style.opacity = '0';
+                setTimeout(() => {
+                    surface.style.display = 'none';
+                }, 500);
+                gameData.scratchedCells[index] = true;
+            });
+            
+            gameData.gameOver = true;
+            
+            setTimeout(() => {
+                const amounts = {};
+                gameData.prizes.forEach((prize) => {
+                    amounts[prize] = (amounts[prize] || 0) + 1;
+                });
+
+                let maxCount = 0;
+                let winningNumber = "";
+                
+                for (const [number, count] of Object.entries(amounts)) {
+                    if (count >= 3 && count > maxCount) {
+                        maxCount = count;
+                        winningNumber = number;
+                    }
+                }
+                
+                if (maxCount >= 5) {
+                     showResult(`🎉 全部顯示：你本來可以中超級大獎 ${winningNumber}（${maxCount}個）！`, 'win');
+                } else if (maxCount >= 4) {
+                    showResult(`🎉 全部顯示：你本來可以中大獎 ${winningNumber}（四個）！`, 'win');
+                } else if (maxCount >= 3) {
+                    showResult(`🎉 全部顯示：你本來可以中獎 ${winningNumber}（三個）！`, 'win');
+                } else {
+                    showResult('😔 全部顯示：這張刮刮樂沒有中獎', 'lose');
+                }
+                updateControls();
+            }, 600);
+        }
+
+        // 初始化遊戲
+        initGame();
+        
+        // 載入所有抽籤資料
+        fetchMotherMessages();
+        fetchBakudaishouMessages();
+        fetchMahayanaMessages();
+        fetchHistoryMessages();
+        
+        async function fetchSheetData(url, dataArray, fallbackMessage) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network error');
+                const text = await response.text();
+                
+                const messages = text.split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0 && line !== 'Content' && line !== 'Content\r');
+                
+                if (messages.length > 0) {
+                    dataArray.push(...messages);
+                } else {
+                    dataArray.push(fallbackMessage);
+                }
+            } catch (error) {
+                console.error('無法載入資料:', url, error);
+                dataArray.push(fallbackMessage);
+            }
+        }
+        
+        function fetchMotherMessages() {
+            fetchSheetData(motherMessagesSheetUrl, motherMessagesData, "祝福與您同在。");
+        }
+        
+        function fetchBakudaishouMessages() {
+            fetchSheetData(bakudaishouSheetUrl, bakudaishouData, "上天慈悲，您的苦厄已被分擔。");
+        }
+        
+        function fetchMahayanaMessages() {
+           fetchSheetData(mahayanaSheetUrl, mahayanaData, "您的功德金不夠,今天請做大乘利他奉仕修行");
+        }
+        
+        function fetchHistoryMessages() {
+            fetchSheetData(historySheetUrl, historyData, "歷史的智慧，源遠流長。");
+        }
+
+        function showChanceModal() {
+            const chanceMessage = document.getElementById('chanceMessage');
+            if (motherMessagesData.length > 0) {
+                const randomIndex = Math.floor(Math.random() * motherMessagesData.length);
+                chanceMessage.innerHTML = motherMessagesData[randomIndex];
+            } else {
+                chanceMessage.innerHTML = "祝福與您同在。";
+            }
+            document.getElementById('chanceModal').style.display = 'flex';
+        }
+        
+        function closeChanceModal() {
+            document.getElementById('chanceModal').style.display = 'none';
+            const result = document.getElementById('result');
+            result.innerHTML = `
+                <div class="result-main">🌟 恭喜中獎！法母指引已收到</div>
+                <div class="result-sub">帶著這份祝福開始美好的一天</div>
+            `;
+            const controls = document.querySelector('.controls');
+            controls.innerHTML = `
+                <button class="btn" onclick="resetGame()" style="background: linear-gradient(135deg, #27ae60, #229954);">
+                    🎲 再次祈福
+                </button>
+                <button class="btn" onclick="revealAll()" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                    👁️ 查看全部
+                </button>
+            `;
+        }
+        
+        function showDestinyModal() {
+            const destinyMessage = document.getElementById('destinyMessage');
+            if (bakudaishouData.length > 0) {
+                const randomMessage = bakudaishouData[Math.floor(Math.random() * bakudaishouData.length)];
+                destinyMessage.innerHTML = randomMessage;
+            } else {
+                destinyMessage.innerHTML = "上天慈悲，您的苦厄已被分擔。";
+            }
+            document.getElementById('destinyModal').style.display = 'flex';
+        }
+        
+        function closeDestinyModal() {
+            document.getElementById('destinyModal').style.display = 'none';
+            const result = document.getElementById('result');
+            result.innerHTML = `
+                <div class="result-main">💜 請加油！今天請努力實踐</div>
+                <div class="result-sub">讓這份慈悲伴隨您的每一天</div>
+            `;
+            const controls = document.querySelector('.controls');
+            controls.innerHTML = `
+                <button class="btn" onclick="resetGame()" style="background: linear-gradient(135deg, #8e44ad, #9b59b6);">
+                    🎲 再次祈福
+                </button>
+                <button class="btn" onclick="revealAll()" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                    👁️ 查看全部
+                </button>
+            `;
+        }
+        
+        function showMahayanaModal() {
+            const mahayanaMessage = document.getElementById('mahayanaMessage');
+            if (mahayanaData.length > 0) {
+                const randomMessage = mahayanaData[Math.floor(Math.random() * mahayanaData.length)];
+                mahayanaMessage.innerHTML = randomMessage;
+            } else {
+                mahayanaMessage.innerHTML = "您的功德金不夠,今天請做大乘利他奉仕修行";
+            }
+            document.getElementById('mahayanaModal').style.display = 'flex';
+        }
+        
+        function closeMahayanaModal() {
+            document.getElementById('mahayanaModal').style.display = 'none';
+            const result = document.getElementById('result');
+            result.innerHTML = `
+                <div class="result-main">🙏 修行圓滿，功德已累積</div>
+                <div class="result-sub">可重新開始或查看全部數字</div>
+            `;
+            const controls = document.querySelector('.controls');
+            controls.innerHTML = `
+                <button class="btn" onclick="resetGame()" style="background: linear-gradient(135deg, #27ae60, #229954);">
+                    🎲 重新修行
+                </button>
+                <button class="btn" onclick="revealAll()" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                    👁️ 查看全部
+                </button>
+            `;
+        }
+
+        function showHistoryModal() {
+            const historyMessage = document.getElementById('historyMessage');
+            if (historyData.length > 0) {
+                const randomMessage = historyData[Math.floor(Math.random() * historyData.length)];
+                historyMessage.innerHTML = randomMessage.replace(/\\n/g, '<br>');
+            } else {
+                historyMessage.innerHTML = "歷史的智慧，源遠流長。";
+            }
+            document.getElementById('historyModal').style.display = 'flex';
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('historyModal').style.display = 'none';
+            const result = document.getElementById('result');
+            result.innerHTML = `
+                <div class="result-main">📜 超級大獎！歷史的智慧與您同在！</div>
+                <div class="result-sub">讓歷史的光輝照亮您的道路</div>
+            `;
+            const controls = document.querySelector('.controls');
+            controls.innerHTML = `
+                <button class="btn" onclick="resetGame()" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                    🎲 再次祈福
+                </button>
+                <button class="btn" onclick="revealAll()" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                    👁️ 查看全部
+                </button>
+            `;
+        }
+    </script>
+</body>
+</html>
