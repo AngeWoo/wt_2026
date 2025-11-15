@@ -146,7 +146,8 @@
         h1 {
             color: #755C48; 
             margin: 0 0 10px 0;
-            font-size: clamp(2em, 7vw, 2.6em);
+            /* 修改此行：將最大字體縮小 */
+            font-size: clamp(2em, 6vw, 2.2em);
             font-weight: bold;
             display: block;
             text-align: center;
@@ -165,6 +166,7 @@
         /* 手機版優化 */
         @media (max-width: 480px) {
             h1 {
+                /* 手機版的尺寸維持不變或微調 */
                 font-size: clamp(1.8em, 7vw, 2.2em);
                 margin-bottom: 8px;
             }
