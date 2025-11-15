@@ -310,15 +310,15 @@
         [data-card="moon-pink"] svg { fill: #F7D94C; }
         [data-card="star-green"] { background-color: #F9F3D0; }
         [data-card="star-green"] svg { fill: #2C9D5D; }
-        [data-card="star-blue"] { background-color: #D9E2E0; }
-        [data-card="star-blue"] svg { fill: #255A81; }
+        /* --- 修改開始：將錠色星星改為藍色星星 --- */
+        [data-card="star-blue"] { background-color: #E3F2FD; }
+        [data-card="star-blue"] svg { fill: #42A5F5; }
+        /* --- 修改結束 --- */
         [data-card="tennis-ball"] { background-color: #C9D8C5; }
         [data-card="tennis-ball"] svg { fill: #97B53F; }
         [data-card="sun-red"] { background-color: #D9E2E0; }
-        /* --- 修改開始 --- */
         [data-card="heart-orange"] { background-color: #F8DCDA; }
-        [data-card="heart-orange"] svg { fill: #E67E22; } /* 將紅色改為橘色 */
-        /* --- 修改結束 --- */
+        [data-card="heart-orange"] svg { fill: #E67E22; }
 
         .controls {
             width: 100%;
@@ -450,9 +450,7 @@
             <symbol id="icon-star" viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,96 50,75 21,96 32,62 2,40 39,40" /></symbol>
             <symbol id="icon-tennis" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke-width="0"/><path d="M 15,35 C 40,65 60,45 85,75" stroke-width="8" stroke="white" fill="none" /></symbol>
             <symbol id="icon-sun" viewBox="0 0 100 100"><g fill="#E84A28"><g stroke="#E84A28" stroke-width="7" stroke-linecap="round"><line x1="50" y1="22" x2="50" y2="7"/><line x1="70" y1="30" x2="82" y2="18"/><line x1="78" y1="50" x2="93" y2="50"/><line x1="70" y1="70" x2="82" y2="82"/><line x1="50" y1="78" x2="50" y2="93"/><line x1="30" y1="70" x2="18" y2="82"/><line x1="22" y1="50" x2="7" y2="50"/><line x1="30" y1="30" x2="18" y2="18"/></g><circle cx="47" cy="48" r="23"/><circle cx="53" cy="52" r="23"/></g></symbol>
-            <!-- --- 修改開始 --- -->
-            <symbol id="icon-heart" viewBox="0 0 100 100"><path fill="#E67E22" d="M50,30 C20,0 0,25 0,45 C0,75 50,100 50,100 C50,100 100,75 100,45 C100,25 80,0 50,30 Z"/></symbol> <!-- 將紅色改為橘色 -->
-            <!-- --- 修改結束 --- -->
+            <symbol id="icon-heart" viewBox="0 0 100 100"><path fill="#E67E22" d="M50,30 C20,0 0,25 0,45 C0,75 50,100 50,100 C50,100 100,75 100,45 C100,25 80,0 50,30 Z"/></symbol>
             <symbol id="icon-sparkle" viewBox="0 0 100 100"><path d="M50 0 L61.2 38.8 L100 50 L61.2 61.2 L50 100 L38.8 61.2 L0 50 L38.8 38.8 Z" /></symbol>
         </defs>
     </svg>
@@ -491,7 +489,7 @@
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
         let mahayanaData = [];
 
-        // --- 修改開始 ---
+        // JavaScript中的卡片定義不需要修改
         const cardArray = [
             { name: 'star-green', svgId: 'icon-star' }, { name: 'moon-pink', svgId: 'icon-moon' },
             { name: 'heart-orange', svgId: 'icon-heart' }, { name: 'sun-red', svgId: 'icon-sun' },
@@ -502,7 +500,6 @@
             { name: 'star-blue', svgId: 'icon-star' }, { name: 'star-green', svgId: 'icon-star' },
             { name: 'moon-pink', svgId: 'icon-moon' }, { name: 'star-blue', svgId: 'icon-star' }
         ];
-        // --- 修改結束 ---
 
         let selectedCards = [];
         let lockBoard = false;
