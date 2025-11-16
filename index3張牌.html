@@ -213,6 +213,7 @@
             transform: rotateY(180deg);
         }
 
+        /* --- MODIFICATION START --- */
         .back-face {
             background: #EACDA3;
             background-image: linear-gradient(135deg, #EACDA3 0%, #D6AE7B 100%);
@@ -222,6 +223,7 @@
             font-weight: bold;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+        /* --- MODIFICATION END --- */
 
         .card-face svg {
             width: 70%; 
@@ -339,9 +341,7 @@
                 <span>點點心連心</span>
                 <svg class="title-icon"><use xlink:href="#icon-sparkle"></use></svg>
             </h1>
-            <!-- --- MODIFICATION START --- -->
-            <p class="instructions">翻開二張相同的牌卡，看看有什麼指引吧！</p>
-            <!-- --- MODIFICATION END --- -->
+            <p class="instructions">翻開三張相同的牌卡，看看有什麼指引吧！</p>
             <div class="memory-game" id="gameBoard"></div>
         </div>
         <div class="controls">
@@ -375,19 +375,9 @@
             { name: 'star-green', svgId: 'icon-star' }, { name: 'star-blue', svgId: 'icon-star' },
             { name: 'moon-pink', svgId: 'icon-moon' }, { name: 'heart-orange', svgId: 'icon-heart' },
             { name: 'sun-red', svgId: 'icon-sun' }, { name: 'tennis-ball', svgId: 'icon-tennis' },
-            // To make it a 2-match game, we need pairs. Let's adjust the array.
-            // The original array has non-pair counts for some items. Let's create pairs.
-            // Simplified for a standard memory game: 8 pairs for 16 cards.
+            { name: 'star-blue', svgId: 'icon-star' }, { name: 'star-green', svgId: 'icon-star' },
+            { name: 'moon-pink', svgId: 'icon-moon' }, { name: 'star-blue', svgId: 'icon-star' }
         ];
-        
-        const baseCards = [
-            { name: 'star-green', svgId: 'icon-star' }, { name: 'moon-pink', svgId: 'icon-moon' },
-            { name: 'heart-orange', svgId: 'icon-heart' }, { name: 'sun-red', svgId: 'icon-sun' },
-            { name: 'tennis-ball', svgId: 'icon-tennis' }, { name: 'star-blue', svgId: 'icon-star' },
-            { name: 'sparkle-gold', svgId: 'icon-sparkle' }, { name: 'moon-alt', svgId: 'icon-moon' }
-        ];
-
-        let gameCards = [...baseCards, ...baseCards]; // Creates pairs
 
         let selectedCards = [];
         let lockBoard = false;
@@ -410,12 +400,13 @@
         }
 
         function createBoard() {
-            shuffle(gameCards);
+            shuffle(cardArray);
             gameBoard.innerHTML = '';
             selectedCards = [];
             lockBoard = false;
 
-            gameCards.forEach((item, index) => { 
+            // --- MODIFICATION START ---
+            cardArray.forEach((item, index) => { // Added index
                 const card = document.createElement('div');
                 card.classList.add('memory-card');
                 card.dataset.card = item.name;
@@ -432,34 +423,31 @@
                 card.addEventListener('click', () => handleCardClick(card));
                 gameBoard.appendChild(card);
             });
+            // --- MODIFICATION END ---
         }
         
-        // --- MODIFICATION START ---
         function handleCardClick(card) {
-            if (lockBoard || card.classList.contains('is-flipped') || selectedCards.length >= 2) return;
+            if (lockBoard || card.classList.contains('is-flipped') || selectedCards.length >= 3) return;
 
             card.classList.add('is-flipped');
             selectedCards.push(card);
 
-            if (selectedCards.length === 2) {
+            if (selectedCards.length === 3) {
                 lockBoard = true;
                 checkForMatch();
             }
         }
 
         function checkForMatch() {
-            const [card1, card2] = selectedCards;
-            const isMatch = card1.dataset.card === card2.dataset.card;
+            const [card1, card2, card3] = selectedCards;
+            const isMatch = card1.dataset.card === card2.dataset.card && card2.dataset.card === card3.dataset.card;
 
             if (isMatch) {
-                // It's a match! The game ends.
                 setTimeout(showGuidance, 600);
             } else {
-                // Not a match, flip them back.
                 setTimeout(unflipCards, 1500);
             }
         }
-        // --- MODIFICATION END ---
 
         function unflipCards() {
             selectedCards.forEach(card => card.classList.remove('is-flipped'));
