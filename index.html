@@ -41,9 +41,7 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            /* 修正 2：禁止雙擊縮放等觸控手勢 */
             touch-action: manipulation;
-            /* 額外的防縮放設定 */
             -webkit-text-size-adjust: 100%;
             -ms-text-size-adjust: 100%;
             text-size-adjust: 100%;
@@ -90,7 +88,6 @@
             align-items: center;
             justify-content: center;
             gap: 25px; 
-            /* 改為 100% 寬度＋置中，避免左右偏移 */
             width: 100%;
             max-width: 450px;
             min-height: 100vh;
@@ -101,7 +98,6 @@
             box-sizing: border-box;
         }
         
-        /* 手機版優化 */
         @media (max-width: 480px) {
             .main-wrapper {
                 gap: 20px;
@@ -109,12 +105,6 @@
             }
         }
         
-        @media (max-width: 360px) {
-            .main-wrapper {
-                padding: 14px 10px;
-            }
-        }
-
         .game-container {
             background: #FAF7F2; 
             border-radius: 20px;
@@ -123,75 +113,43 @@
             text-align: center;
             width: 100%;
             box-sizing: border-box;
-            /* 防止觸控縮放 */
             touch-action: manipulation;
             margin: 0;
-            /* 移除 flexbox，使用簡單的 block 布局 */
         }
         
-        /* 手機版優化 */
         @media (max-width: 480px) {
             .game-container {
                 padding: 20px;
                 border-radius: 15px;
             }
         }
-        
-        @media (max-width: 360px) {
-            .game-container {
-                padding: 16px;
-            }
-        }
 
         h1 {
             color: #755C48; 
             margin: 0 0 10px 0;
-            /* 修改此行：將最大字體縮小 */
             font-size: clamp(2em, 6vw, 2.2em);
             font-weight: bold;
-            display: block;
             text-align: center;
             text-shadow: 3px 3px 5px rgba(161, 136, 127, 0.4);
-            width: 100%;
-            padding: 0;
-            box-sizing: border-box;
         }
         
         h1 .title-icon {
             display: inline-block;
             vertical-align: middle;
             margin: 0 10px;
+            width: 25px;
+            height: 25px;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.1));
         }
-        
-        /* 手機版優化 */
+
         @media (max-width: 480px) {
             h1 {
-                /* 手機版的尺寸維持不變或微調 */
                 font-size: clamp(1.8em, 7vw, 2.2em);
                 margin-bottom: 8px;
             }
-            
             h1 .title-icon {
-                margin: 0 8px;
-            }
-        }
-
-        .title-icon {
-            width: 25px;
-            height: 25px;
-            color: #000000;
-            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.1));
-            display: inline-block;
-            vertical-align: middle;
-            margin: 0 10px -3px 10px;
-        }
-        
-        /* 手機版優化 */
-        @media (max-width: 480px) {
-            .title-icon {
                 width: 20px;
                 height: 20px;
-                margin: 0 8px -2px 8px;
             }
         }
         
@@ -199,19 +157,14 @@
             color: #A1887F;
             font-size: 1.1em;
             margin-bottom: 30px;
-            width: 100%;
             text-align: center;
             line-height: 1.6;
-            padding: 0;
-            box-sizing: border-box;
         }
         
-        /* 手機版優化 */
         @media (max-width: 480px) {
             .instructions {
                 font-size: 1em;
                 margin-bottom: 20px;
-                line-height: 1.5;
             }
         }
 
@@ -219,114 +172,79 @@
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr)); 
             gap: 12px;
-            /* 限制最大寬度並用 margin: 0 auto 置中，避免視覺上偏右 */
             width: 100%;
             max-width: 360px;
             margin: 0 auto;
-            padding: 0;
-            box-sizing: border-box;
-            /* 防止觸控縮放 */
             touch-action: manipulation;
-            /* 讓整個 grid 區塊在容器中水平置中 */
-            justify-content: center;
+            perspective: 1000px; /* For 3D flip effect */
         }
         
-        /* 手機版優化 */
-        @media (max-width: 480px) {
-            .memory-game {
-                gap: 10px;
-            }
-        }
-        
-        @media (max-width: 360px) {
-            .memory-game {
-                gap: 8px;
-            }
-        }
+        @media (max-width: 480px) { .memory-game { gap: 10px; } }
+        @media (max-width: 360px) { .memory-game { gap: 8px; } }
 
         .memory-card {
             width: 100%;
             aspect-ratio: 1;
-            border-radius: 15px;
             cursor: pointer;
-            transition: box-shadow 0.3s ease, border 0.3s ease, opacity 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            border: 3px solid transparent;
-            box-sizing: border-box;
-            /* 防止觸控縮放 - 關鍵設定 */
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
-            /* 防止任何形式的縮放 */
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        
-        /* 移除手機版的 hover 效果，只在桌面版啟用 */
-        @media (hover: hover) and (pointer: fine) {
-            .memory-card:hover {
-                box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            }
         }
 
-        .memory-card.selected {
-            /* 不使用 transform: scale，改用邊框和陰影來表示選中狀態 */
-            box-shadow: 0 0 20px 5px rgba(121, 85, 72, 0.3);
-            border: 3px solid #C8A987;
-            opacity: 0.9;
+        .memory-card.is-flipped {
+            transform: rotateY(180deg);
         }
 
-        @keyframes spin-animation {
-            from { 
-                transform: perspective(1000px) rotateY(0deg); 
-            }
-            to { 
-                transform: perspective(1000px) rotateY(360deg); 
-            }
-        }
-
-        .memory-card.is-spinning {
-            animation: spin-animation 1s ease-in-out;
-            /* 確保動畫不會觸發頁面縮放 */
-            transform-origin: center center;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-
-        .memory-card .icon {
+        .card-face {
+            position: absolute;
             width: 100%;
             height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
 
-        .memory-card .icon svg {
+        /* --- CORRECTION START --- */
+        .front-face {
+            /* This is the visible side with the icon. It's hidden initially. */
+            transform: rotateY(180deg);
+        }
+
+        .back-face {
+            /* This is the cover of the card. It's visible initially. */
+            background: #EACDA3;
+            background-image: linear-gradient(135deg, #EACDA3 0%, #D6AE7B 100%);
+        }
+        /* --- CORRECTION END --- */
+
+        .card-face svg {
             width: 70%; 
             height: 70%;
         }
         
-        [data-card="moon-pink"] { background-color: #F8DCDA; }
+        /* Card Colors */
+        [data-card="moon-pink"] .front-face { background-color: #F8DCDA; }
         [data-card="moon-pink"] svg { fill: #F7D94C; }
-        [data-card="star-green"] { background-color: #F9F3D0; }
+        [data-card="star-green"] .front-face { background-color: #F9F3D0; }
         [data-card="star-green"] svg { fill: #2C9D5D; }
-        /* --- 修改開始：將錠色星星改為藍色星星 --- */
-        [data-card="star-blue"] { background-color: #E3F2FD; }
+        [data-card="star-blue"] .front-face { background-color: #E3F2FD; }
         [data-card="star-blue"] svg { fill: #42A5F5; }
-        /* --- 修改結束 --- */
-        [data-card="tennis-ball"] { background-color: #C9D8C5; }
+        [data-card="tennis-ball"] .front-face { background-color: #C9D8C5; }
         [data-card="tennis-ball"] svg { fill: #97B53F; }
-        [data-card="sun-red"] { background-color: #D9E2E0; }
-        [data-card="heart-orange"] { background-color: #F8DCDA; }
+        [data-card="sun-red"] .front-face { background-color: #D9E2E0; }
+        [data-card="sun-red"] svg { fill: #E84A28; }
+        [data-card="heart-orange"] .front-face { background-color: #F8DCDA; }
         [data-card="heart-orange"] svg { fill: #E67E22; }
 
         .controls {
             width: 100%;
             display: flex;
             justify-content: center;
-            align-items: center;
-            margin: 0;
-            padding: 0;
         }
 
         .btn {
@@ -340,24 +258,18 @@
             cursor: pointer;
             transition: box-shadow 0.3s ease;
             width: 100%;
-            max-width: 100%;
             letter-spacing: 2px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            /* 防止觸控縮放 */
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* 手機版優化 */
         @media (max-width: 480px) {
             .btn {
                 font-size: 1.1em;
                 padding: 14px 25px;
-                letter-spacing: 1.5px;
             }
         }
-
-        /* 只在桌面版啟用 hover 效果 */
         @media (hover: hover) and (pointer: fine) {
             .btn:hover {
                 box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -365,78 +277,42 @@
         }
         
         .modal {
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%;
-            background: rgba(80, 70, 60, 0.6); 
-            backdrop-filter: blur(5px);
-            z-index: 1000; 
-            justify-content: center; 
-            align-items: center;
-            opacity: 0; 
-            transition: opacity 0.3s ease; 
-            padding: 20px;
-            /* 防止觸控縮放 */
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(80, 70, 60, 0.6); backdrop-filter: blur(5px);
+            z-index: 1000; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease; padding: 20px;
             touch-action: manipulation;
         }
         .modal.show { display: flex; opacity: 1; }
-        
-        /* 手機版優化 */
-        @media (max-width: 480px) {
-            .modal {
-                padding: 15px;
-            }
-        }
         .modal-content {
             background: var(--modal-bg); border-radius: 25px; padding: 25px 30px 30px;
             max-width: 480px; width: 100%; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             position: relative; text-align: center;
-            /* 防止觸控縮放和優化渲染 */
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-            will-change: transform;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
         .modal.show .modal-content { transform: scale(1); }
         .modal-icon {
             width: 120px; height: 120px; margin: -20px auto 20px;
             background-color: var(--modal-accent);
             -webkit-mask-image: url(slogo.png); mask-image: url(slogo.png);
-            -webkit-mask-size: contain; mask-size: contain;
-            -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-            -webkit-mask-position: center; mask-position: center;
+            -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;
         }
-        .modal-header h3 {
-            font-size: 26px; color: var(--modal-title-text);
-            font-weight: bold; margin-bottom: 25px;
-        }
+        .modal-header h3 { font-size: 26px; color: var(--modal-title-text); font-weight: bold; margin-bottom: 25px; }
         .modal-message-container {
-            font-size: 20px; line-height: 1.8; color: var(--modal-text);
-            text-align: center; margin-bottom: 30px; padding: 25px;
-            background: var(--modal-content-bg); border: 1px solid var(--modal-border);
-            border-radius: 15px;
+            font-size: 20px; line-height: 1.8; color: var(--modal-text); text-align: center; margin-bottom: 30px;
+            padding: 25px; background: var(--modal-content-bg); border: 1px solid var(--modal-border); border-radius: 15px;
         }
         .modal-button {
-            background: var(--modal-accent); color: white;
-            border: none; padding: 16px 50px; font-size: 18px; font-weight: bold;
-            border-radius: 50px; cursor: pointer; width: 100%; max-width: 300px;
+            background: var(--modal-accent); color: white; border: none; padding: 16px 50px;
+            font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%; max-width: 300px;
             display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-            /* 防止觸控縮放 */
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
+            transition: box-shadow 0.3s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
-        
-        /* 只在桌面版啟用 hover 效果 */
         @media (hover: hover) and (pointer: fine) {
-            .modal-button:hover {
-                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-            }
+            .modal-button:hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); }
         }
-
     </style>
 </head>
 <body>
@@ -450,7 +326,7 @@
             <symbol id="icon-star" viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,96 50,75 21,96 32,62 2,40 39,40" /></symbol>
             <symbol id="icon-tennis" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke-width="0"/><path d="M 15,35 C 40,65 60,45 85,75" stroke-width="8" stroke="white" fill="none" /></symbol>
             <symbol id="icon-sun" viewBox="0 0 100 100"><g fill="#E84A28"><g stroke="#E84A28" stroke-width="7" stroke-linecap="round"><line x1="50" y1="22" x2="50" y2="7"/><line x1="70" y1="30" x2="82" y2="18"/><line x1="78" y1="50" x2="93" y2="50"/><line x1="70" y1="70" x2="82" y2="82"/><line x1="50" y1="78" x2="50" y2="93"/><line x1="30" y1="70" x2="18" y2="82"/><line x1="22" y1="50" x2="7" y2="50"/><line x1="30" y1="30" x2="18" y2="18"/></g><circle cx="47" cy="48" r="23"/><circle cx="53" cy="52" r="23"/></g></symbol>
-            <symbol id="icon-heart" viewBox="0 0 100 100"><path fill="#E67E22" d="M50,30 C20,0 0,25 0,45 C0,75 50,100 50,100 C50,100 100,75 100,45 C100,25 80,0 50,30 Z"/></symbol>
+            <symbol id="icon-heart" viewBox="0 0 100 100"><path d="M50,30 C20,0 0,25 0,45 C0,75 50,100 50,100 C50,100 100,75 100,45 C100,25 80,0 50,30 Z"/></symbol>
             <symbol id="icon-sparkle" viewBox="0 0 100 100"><path d="M50 0 L61.2 38.8 L100 50 L61.2 61.2 L50 100 L38.8 61.2 L0 50 L38.8 38.8 Z" /></symbol>
         </defs>
     </svg>
@@ -462,11 +338,11 @@
                 <span>點點心連心</span>
                 <svg class="title-icon"><use xlink:href="#icon-sparkle"></use></svg>
             </h1>
-            <p class="instructions">點選二張與你心相連的顏色牌卡吧！</p>
+            <p class="instructions">翻開三張相同的牌卡，看看有什麼指引吧！</p>
             <div class="memory-game" id="gameBoard"></div>
         </div>
         <div class="controls">
-            <button class="btn" onclick="resetGame()">2026寒修行</button>
+            <button class="btn" onclick="startNewGame()">2026寒修行</button>
         </div>
     </div>
 
@@ -489,7 +365,6 @@
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
         let mahayanaData = [];
 
-        // JavaScript中的卡片定義不需要修改
         const cardArray = [
             { name: 'star-green', svgId: 'icon-star' }, { name: 'moon-pink', svgId: 'icon-moon' },
             { name: 'heart-orange', svgId: 'icon-heart' }, { name: 'sun-red', svgId: 'icon-sun' },
@@ -503,7 +378,6 @@
 
         let selectedCards = [];
         let lockBoard = false;
-        let isGameActive = true; 
 
         async function loadSheetData() {
             try {
@@ -518,102 +392,92 @@
             }
         }
 
-        function shuffle(array) { array.sort(() => 0.5 - Math.random()); }
+        function shuffle(array) {
+            array.sort(() => 0.5 - Math.random());
+        }
 
         function createBoard() {
             shuffle(cardArray);
             gameBoard.innerHTML = '';
+            selectedCards = [];
+            lockBoard = false;
+
             cardArray.forEach(item => {
                 const card = document.createElement('div');
                 card.classList.add('memory-card');
-                const iconDiv = document.createElement('div');
-                iconDiv.classList.add('icon');
-                iconDiv.dataset.card = item.name;
-                iconDiv.innerHTML = `<svg><use xlink:href="#${item.svgId}"></use></svg>`;
-                card.appendChild(iconDiv);
+                card.dataset.card = item.name;
+
+                card.innerHTML = `
+                    <div class="card-face front-face">
+                        <svg><use xlink:href="#${item.svgId}"></use></svg>
+                    </div>
+                    <div class="card-face back-face"></div>
+                `;
                 
-                card.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleCardClick(card);
-                });
-                
-                card.addEventListener('touchstart', (e) => {
-                    e.stopPropagation();
-                }, { passive: true });
-                
+                card.addEventListener('click', () => handleCardClick(card));
                 gameBoard.appendChild(card);
             });
         }
         
-        // --- MODIFICATION START ---
-        
-        function checkForMatch() {
-            const [firstCard, secondCard] = selectedCards;
-            const isMatch = firstCard.querySelector('.icon').dataset.card === secondCard.querySelector('.icon').dataset.card;
-
-            if (isMatch) {
-                // 卡片匹配成功，顯示指引訊息
-                setTimeout(showGuidance, 500);
-            } else {
-                // 卡片不匹配，顯示「重來」提示並重置選擇
-                const instructions = document.querySelector('.instructions');
-                const originalText = "點選二張與你心相連的顏色牌卡吧！";
-                
-                instructions.textContent = "卡片不相符，請重來！";
-
-                setTimeout(() => {
-                    firstCard.classList.remove('selected');
-                    secondCard.classList.remove('selected');
-                    
-                    selectedCards = [];
-                    lockBoard = false;
-
-                    instructions.textContent = originalText;
-                }, 1200); // 延遲 ताकि user can see the mismatch
-            }
-        }
-
         function handleCardClick(card) {
-            if (lockBoard || card.classList.contains('selected')) return;
-            
-            card.classList.add('selected');
+            if (lockBoard || card.classList.contains('is-flipped') || selectedCards.length >= 3) return;
+
+            card.classList.add('is-flipped');
             selectedCards.push(card);
-            
-            if (selectedCards.length === 2) {
+
+            if (selectedCards.length === 3) {
                 lockBoard = true;
                 checkForMatch();
             }
         }
-        
-        // --- MODIFICATION END ---
-        
-        function showGuidance() {
-            isGameActive = false; 
-            if (mahayanaData.length < 1) {
-                modalTitleEl.textContent = '提醒';
-                guidanceMessageEl.textContent = '資料不足，無法提供指引。';
+
+        function checkForMatch() {
+            const [card1, card2, card3] = selectedCards;
+            const isMatch = card1.dataset.card === card2.dataset.card && card2.dataset.card === card3.dataset.card;
+
+            if (isMatch) {
+                setTimeout(showGuidance, 600);
             } else {
-                const randomMessage = mahayanaData[Math.floor(Math.random() * mahayanaData.length)];
-                const match = randomMessage.match(/\(([^)]+)\)(.*)/s); 
-                if (match && match[1] && match[2]) {
-                    modalTitleEl.textContent = `(摘錄自) ${match[1].trim()}`;
-                    guidanceMessageEl.innerHTML = match[2].trim().replace(/\n/g, '<br>');
-                } else {
-                    modalTitleEl.textContent = '修行指引';
-                    guidanceMessageEl.innerHTML = randomMessage.trim().replace(/\n/g, '<br>');
-                }
+                setTimeout(unflipCards, 1500);
             }
-            modal.classList.add('show');
         }
 
-        function closeModal() { modal.classList.remove('show'); setTimeout(resetGame, 300); }
-
-        function resetGame() {
-            selectedCards.forEach(card => card.classList.remove('selected'));
+        function unflipCards() {
+            selectedCards.forEach(card => card.classList.remove('is-flipped'));
             selectedCards = [];
             lockBoard = false;
-            isGameActive = true; 
+        }
+        
+        function showGuidance() {
+            const allCards = document.querySelectorAll('.memory-card');
+            allCards.forEach(card => card.classList.add('is-flipped'));
+
+            setTimeout(() => {
+                if (mahayanaData.length < 1) {
+                    modalTitleEl.textContent = '提醒';
+                    guidanceMessageEl.textContent = '資料不足，無法提供指引。';
+                } else {
+                    const randomMessage = mahayanaData[Math.floor(Math.random() * mahayanaData.length)];
+                    const match = randomMessage.match(/\(([^)]+)\)(.*)/s); 
+                    if (match && match[1] && match[2]) {
+                        modalTitleEl.textContent = `(摘錄自) ${match[1].trim()}`;
+                        guidanceMessageEl.innerHTML = match[2].trim().replace(/\n/g, '<br>');
+                    } else {
+                        modalTitleEl.textContent = '修行指引';
+                        guidanceMessageEl.innerHTML = randomMessage.trim().replace(/\n/g, '<br>');
+                    }
+                }
+                modal.classList.add('show');
+            }, 500);
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+            setTimeout(startNewGame, 300);
+        }
+
+        function startNewGame() {
+            createBoard();
         }
 
         function createSnowflakes() {
@@ -631,76 +495,24 @@
             container.innerHTML = snowflakesHTML;
         }
 
-        function animateRandomCards() {
-            if (!isGameActive) return; 
-
-            const cards = document.querySelectorAll('.memory-card');
-            if (cards.length < 2) return;
-
-            let index1 = Math.floor(Math.random() * cards.length);
-            let index2;
-            do {
-                index2 = Math.floor(Math.random() * cards.length);
-            } while (index1 === index2);
-
-            const card1 = cards[index1];
-            const card2 = cards[index2];
-
-            card1.classList.add('is-spinning');
-            card2.classList.add('is-spinning');
-
-            setTimeout(() => {
-                card1.classList.remove('is-spinning');
-                card2.classList.remove('is-spinning');
-            }, 1000); 
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            createBoard();
+            startNewGame();
             loadSheetData();
             createSnowflakes();
-            setInterval(animateRandomCards, 3000);
             
-            // === 全面的觸控縮放防止機制 ===
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function (event) {
+            // Comprehensive touch zoom prevention
+            document.addEventListener('touchend', (event) => {
                 const now = (new Date()).getTime();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                lastTouchEnd = now;
-            }, { passive: false });
-            
-            document.addEventListener('gesturestart', function (event) { event.preventDefault(); }, { passive: false });
-            document.addEventListener('gesturechange', function (event) { event.preventDefault(); }, { passive: false });
-            document.addEventListener('gestureend', function (event) { event.preventDefault(); }, { passive: false });
-            
-            document.addEventListener('wheel', function(event) {
-                if (event.ctrlKey) {
+                if (now - (window.lastTouchEnd || 0) <= 300) {
                     event.preventDefault();
                 }
+                window.lastTouchEnd = now;
             }, { passive: false });
             
-            document.addEventListener('touchstart', function(event) {
-                if (event.touches.length > 1) {
-                    event.preventDefault();
-                }
-            }, { passive: false });
-            
-            document.addEventListener('touchmove', function(event) {
-                if (event.touches.length > 1) {
-                    event.preventDefault();
-                }
-            }, { passive: false });
-            
-            ['touchstart', 'touchmove', 'touchend'].forEach(eventType => {
-                document.body.addEventListener(eventType, function(e) {
-                    if (e.touches && e.touches.length > 1) {
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-            });
+            document.addEventListener('gesturestart', (event) => event.preventDefault(), { passive: false });
+            document.addEventListener('wheel', (event) => { if (event.ctrlKey) event.preventDefault(); }, { passive: false });
+            document.body.addEventListener('touchstart', (e) => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
+            document.body.addEventListener('touchmove', (e) => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
         });
 
         closeModalBtn.addEventListener('click', closeModal);

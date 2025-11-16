@@ -146,7 +146,8 @@
         h1 {
             color: #755C48; 
             margin: 0 0 10px 0;
-            font-size: clamp(2em, 7vw, 2.6em);
+            /* 修改此行：將最大字體縮小 */
+            font-size: clamp(2em, 6vw, 2.2em);
             font-weight: bold;
             display: block;
             text-align: center;
@@ -165,6 +166,7 @@
         /* 手機版優化 */
         @media (max-width: 480px) {
             h1 {
+                /* 手機版的尺寸維持不變或微調 */
                 font-size: clamp(1.8em, 7vw, 2.2em);
                 margin-bottom: 8px;
             }
@@ -308,13 +310,15 @@
         [data-card="moon-pink"] svg { fill: #F7D94C; }
         [data-card="star-green"] { background-color: #F9F3D0; }
         [data-card="star-green"] svg { fill: #2C9D5D; }
-        [data-card="star-blue"] { background-color: #D9E2E0; }
-        [data-card="star-blue"] svg { fill: #255A81; }
+        /* --- 修改開始：將錠色星星改為藍色星星 --- */
+        [data-card="star-blue"] { background-color: #E3F2FD; }
+        [data-card="star-blue"] svg { fill: #42A5F5; }
+        /* --- 修改結束 --- */
         [data-card="tennis-ball"] { background-color: #C9D8C5; }
         [data-card="tennis-ball"] svg { fill: #97B53F; }
         [data-card="sun-red"] { background-color: #D9E2E0; }
-        [data-card="heart-red"] { background-color: #F8DCDA; }
-        [data-card="heart-red"] svg { fill: #E84A28; }
+        [data-card="heart-orange"] { background-color: #F8DCDA; }
+        [data-card="heart-orange"] svg { fill: #E67E22; }
 
         .controls {
             width: 100%;
@@ -446,7 +450,7 @@
             <symbol id="icon-star" viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,96 50,75 21,96 32,62 2,40 39,40" /></symbol>
             <symbol id="icon-tennis" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke-width="0"/><path d="M 15,35 C 40,65 60,45 85,75" stroke-width="8" stroke="white" fill="none" /></symbol>
             <symbol id="icon-sun" viewBox="0 0 100 100"><g fill="#E84A28"><g stroke="#E84A28" stroke-width="7" stroke-linecap="round"><line x1="50" y1="22" x2="50" y2="7"/><line x1="70" y1="30" x2="82" y2="18"/><line x1="78" y1="50" x2="93" y2="50"/><line x1="70" y1="70" x2="82" y2="82"/><line x1="50" y1="78" x2="50" y2="93"/><line x1="30" y1="70" x2="18" y2="82"/><line x1="22" y1="50" x2="7" y2="50"/><line x1="30" y1="30" x2="18" y2="18"/></g><circle cx="47" cy="48" r="23"/><circle cx="53" cy="52" r="23"/></g></symbol>
-            <symbol id="icon-heart" viewBox="0 0 100 100"><path fill="#E84A28" d="M50,30 C20,0 0,25 0,45 C0,75 50,100 50,100 C50,100 100,75 100,45 C100,25 80,0 50,30 Z"/></symbol>
+            <symbol id="icon-heart" viewBox="0 0 100 100"><path fill="#E67E22" d="M50,30 C20,0 0,25 0,45 C0,75 50,100 50,100 C50,100 100,75 100,45 C100,25 80,0 50,30 Z"/></symbol>
             <symbol id="icon-sparkle" viewBox="0 0 100 100"><path d="M50 0 L61.2 38.8 L100 50 L61.2 61.2 L50 100 L38.8 61.2 L0 50 L38.8 38.8 Z" /></symbol>
         </defs>
     </svg>
@@ -485,12 +489,13 @@
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
         let mahayanaData = [];
 
+        // JavaScript中的卡片定義不需要修改
         const cardArray = [
             { name: 'star-green', svgId: 'icon-star' }, { name: 'moon-pink', svgId: 'icon-moon' },
-            { name: 'heart-red', svgId: 'icon-heart' }, { name: 'sun-red', svgId: 'icon-sun' },
+            { name: 'heart-orange', svgId: 'icon-heart' }, { name: 'sun-red', svgId: 'icon-sun' },
             { name: 'tennis-ball', svgId: 'icon-tennis' }, { name: 'star-blue', svgId: 'icon-star' },
             { name: 'star-green', svgId: 'icon-star' }, { name: 'star-blue', svgId: 'icon-star' },
-            { name: 'moon-pink', svgId: 'icon-moon' }, { name: 'heart-red', svgId: 'icon-heart' },
+            { name: 'moon-pink', svgId: 'icon-moon' }, { name: 'heart-orange', svgId: 'icon-heart' },
             { name: 'sun-red', svgId: 'icon-sun' }, { name: 'tennis-ball', svgId: 'icon-tennis' },
             { name: 'star-blue', svgId: 'icon-star' }, { name: 'star-green', svgId: 'icon-star' },
             { name: 'moon-pink', svgId: 'icon-moon' }, { name: 'star-blue', svgId: 'icon-star' }
@@ -527,14 +532,12 @@
                 iconDiv.innerHTML = `<svg><use xlink:href="#${item.svgId}"></use></svg>`;
                 card.appendChild(iconDiv);
                 
-                // 修改點擊事件處理，防止任何可能的縮放
                 card.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     handleCardClick(card);
                 });
                 
-                // 防止觸控開始時的默認行為
                 card.addEventListener('touchstart', (e) => {
                     e.stopPropagation();
                 }, { passive: true });
@@ -543,12 +546,47 @@
             });
         }
         
+        // --- MODIFICATION START ---
+        
+        function checkForMatch() {
+            const [firstCard, secondCard] = selectedCards;
+            const isMatch = firstCard.querySelector('.icon').dataset.card === secondCard.querySelector('.icon').dataset.card;
+
+            if (isMatch) {
+                // 卡片匹配成功，顯示指引訊息
+                setTimeout(showGuidance, 500);
+            } else {
+                // 卡片不匹配，顯示「重來」提示並重置選擇
+                const instructions = document.querySelector('.instructions');
+                const originalText = "點選二張與你心相連的顏色牌卡吧！";
+                
+                instructions.textContent = "卡片不相符，請重來！";
+
+                setTimeout(() => {
+                    firstCard.classList.remove('selected');
+                    secondCard.classList.remove('selected');
+                    
+                    selectedCards = [];
+                    lockBoard = false;
+
+                    instructions.textContent = originalText;
+                }, 1200); // 延遲 ताकि user can see the mismatch
+            }
+        }
+
         function handleCardClick(card) {
-            if (lockBoard || selectedCards.length >= 2 || card.classList.contains('selected')) return;
+            if (lockBoard || card.classList.contains('selected')) return;
+            
             card.classList.add('selected');
             selectedCards.push(card);
-            if (selectedCards.length === 2) { lockBoard = true; setTimeout(showGuidance, 500); }
+            
+            if (selectedCards.length === 2) {
+                lockBoard = true;
+                checkForMatch();
+            }
         }
+        
+        // --- MODIFICATION END ---
         
         function showGuidance() {
             isGameActive = false; 
@@ -623,9 +661,7 @@
             createSnowflakes();
             setInterval(animateRandomCards, 3000);
             
-            // === 修正 3：全面的觸控縮放防止機制 ===
-            
-            // 1. 防止雙擊縮放（加強版）
+            // === 全面的觸控縮放防止機制 ===
             let lastTouchEnd = 0;
             document.addEventListener('touchend', function (event) {
                 const now = (new Date()).getTime();
@@ -636,37 +672,19 @@
                 lastTouchEnd = now;
             }, { passive: false });
             
-            // 2. 防止手勢縮放
-            document.addEventListener('gesturestart', function (event) {
-                event.preventDefault();
-            }, { passive: false });
+            document.addEventListener('gesturestart', function (event) { event.preventDefault(); }, { passive: false });
+            document.addEventListener('gesturechange', function (event) { event.preventDefault(); }, { passive: false });
+            document.addEventListener('gestureend', function (event) { event.preventDefault(); }, { passive: false });
             
-            document.addEventListener('gesturechange', function (event) {
-                event.preventDefault();
-            }, { passive: false });
-            
-            document.addEventListener('gestureend', function (event) {
-                event.preventDefault();
-            }, { passive: false });
-            
-            // 3. 防止滾輪縮放
             document.addEventListener('wheel', function(event) {
                 if (event.ctrlKey) {
                     event.preventDefault();
                 }
             }, { passive: false });
             
-            // 4. 防止觸控移動時的縮放
-            let touchStartDistance = 0;
             document.addEventListener('touchstart', function(event) {
                 if (event.touches.length > 1) {
                     event.preventDefault();
-                    const touch1 = event.touches[0];
-                    const touch2 = event.touches[1];
-                    touchStartDistance = Math.hypot(
-                        touch2.pageX - touch1.pageX,
-                        touch2.pageY - touch1.pageY
-                    );
                 }
             }, { passive: false });
             
@@ -676,24 +694,6 @@
                 }
             }, { passive: false });
             
-            // 5. 阻止視窗大小變化（某些瀏覽器的縮放會觸發）
-            let lastWidth = window.innerWidth;
-            let lastHeight = window.innerHeight;
-            window.addEventListener('resize', function() {
-                const newWidth = window.innerWidth;
-                const newHeight = window.innerHeight;
-                
-                // 如果是明顯的縮放（而非旋轉），嘗試重置視窗
-                if (Math.abs(newWidth - lastWidth) > 50 || Math.abs(newHeight - lastHeight) > 50) {
-                    // 記錄但不做任何會影響布局的事情
-                    console.log('Window size changed significantly');
-                }
-                
-                lastWidth = newWidth;
-                lastHeight = newHeight;
-            });
-            
-            // 6. 強制禁用所有可能的縮放相關事件
             ['touchstart', 'touchmove', 'touchend'].forEach(eventType => {
                 document.body.addEventListener(eventType, function(e) {
                     if (e.touches && e.touches.length > 1) {
