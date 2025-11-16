@@ -209,18 +209,21 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
 
-        /* --- CORRECTION START --- */
         .front-face {
-            /* This is the visible side with the icon. It's hidden initially. */
             transform: rotateY(180deg);
         }
 
+        /* --- MODIFICATION START --- */
         .back-face {
-            /* This is the cover of the card. It's visible initially. */
             background: #EACDA3;
             background-image: linear-gradient(135deg, #EACDA3 0%, #D6AE7B 100%);
+            /* Styling for the number */
+            color: rgba(255, 255, 255, 0.8);
+            font-size: clamp(1.5em, 5vw, 2em);
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        /* --- CORRECTION END --- */
+        /* --- MODIFICATION END --- */
 
         .card-face svg {
             width: 70%; 
@@ -402,7 +405,8 @@
             selectedCards = [];
             lockBoard = false;
 
-            cardArray.forEach(item => {
+            // --- MODIFICATION START ---
+            cardArray.forEach((item, index) => { // Added index
                 const card = document.createElement('div');
                 card.classList.add('memory-card');
                 card.dataset.card = item.name;
@@ -411,12 +415,15 @@
                     <div class="card-face front-face">
                         <svg><use xlink:href="#${item.svgId}"></use></svg>
                     </div>
-                    <div class="card-face back-face"></div>
+                    <div class="card-face back-face">
+                        ${index + 1}
+                    </div>
                 `;
                 
                 card.addEventListener('click', () => handleCardClick(card));
                 gameBoard.appendChild(card);
             });
+            // --- MODIFICATION END ---
         }
         
         function handleCardClick(card) {
