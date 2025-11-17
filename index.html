@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <title>點點心連心</title>
+    <title>記憶大考驗</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
         html {
             margin: 0;
@@ -126,30 +129,37 @@
 
         h1 {
             color: #755C48; 
-            margin: 0 0 10px 0;
-            font-size: clamp(2em, 6vw, 2.2em);
-            font-weight: bold;
-            text-align: center;
-            text-shadow: 3px 3px 5px rgba(161, 136, 127, 0.4);
+            margin: 0 0 15px 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2.4em, 8vw, 2.8em);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-shadow: 
+                1px 1px 0px rgba(90, 70, 60, 0.6),
+                2px 2px 0px rgba(90, 70, 60, 0.6),
+                3px 3px 0px rgba(90, 70, 60, 0.6),
+                4px 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            white-space: nowrap;
         }
         
         h1 .title-icon {
-            display: inline-block;
-            vertical-align: middle;
-            margin: 0 10px;
-            width: 25px;
-            height: 25px;
-            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.1));
+            width: 50px;
+            height: 50px;
+            margin: 0 8px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
         }
 
         @media (max-width: 480px) {
             h1 {
-                font-size: clamp(1.8em, 7vw, 2.2em);
-                margin-bottom: 8px;
+                font-size: clamp(2.0em, 8vw, 2.2em);
+                margin-bottom: 12px;
             }
             h1 .title-icon {
-                width: 20px;
-                height: 20px;
+                width: 40px;
+                height: 40px;
             }
         }
         
@@ -216,7 +226,6 @@
         .back-face {
             background: #EACDA3;
             background-image: linear-gradient(135deg, #EACDA3 0%, #D6AE7B 100%);
-            /* Styling for the number */
             color: rgba(255, 255, 255, 0.8);
             font-size: clamp(1.5em, 5vw, 2em);
             font-weight: bold;
@@ -228,19 +237,24 @@
             height: 70%;
         }
         
-        /* Card Colors */
-        [data-card="moon-pink"] .front-face { background-color: #F8DCDA; }
-        [data-card="moon-pink"] svg { fill: #F7D94C; }
-        [data-card="star-green"] .front-face { background-color: #F9F3D0; }
-        [data-card="star-green"] svg { fill: #2C9D5D; }
+        [data-card="moon-pink"] .front-face,
+        [data-card="moon-pink-2"] .front-face { background-color: #F8DCDA; }
+        [data-card="moon-pink"] svg,
+        [data-card="moon-pink-2"] svg { fill: #F7D94C; }
+        
+        [data-card="star-green"] .front-face,
+        [data-card="star-green-2"] .front-face { background-color: #F9F3D0; }
+        [data-card="star-green"] svg,
+        [data-card="star-green-2"] svg { fill: #2C9D5D; }
+
         [data-card="star-blue"] .front-face { background-color: #E3F2FD; }
         [data-card="star-blue"] svg { fill: #42A5F5; }
-        [data-card="tennis-ball"] .front-face { background-color: #C9D8C5; }
-        [data-card="tennis-ball"] svg { fill: #97B53F; }
         [data-card="sun-red"] .front-face { background-color: #D9E2E0; }
         [data-card="sun-red"] svg { fill: #E84A28; }
         [data-card="heart-orange"] .front-face { background-color: #F8DCDA; }
         [data-card="heart-orange"] svg { fill: #E67E22; }
+        [data-card="tennis-ball"] .front-face { background-color: #C9D8C5; }
+        [data-card="tennis-ball"] svg { fill: #97B53F; }
 
         .controls {
             width: 100%;
@@ -301,10 +315,17 @@
             mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;
         }
         .modal-header h3 { font-size: 26px; color: var(--modal-title-text); font-weight: bold; margin-bottom: 25px; }
+        
+        /* --- MODIFICATION START --- */
         .modal-message-container {
-            font-size: 20px; line-height: 1.8; color: var(--modal-text); text-align: center; margin-bottom: 30px;
-            padding: 25px; background: var(--modal-content-bg); border: 1px solid var(--modal-border); border-radius: 15px;
+            font-size: 20px; line-height: 1.8; color: var(--modal-text);
+            text-align: left; /* Changed from 'center' to 'left' */
+            margin-bottom: 30px; padding: 25px;
+            background: var(--modal-content-bg); border: 1px solid var(--modal-border);
+            border-radius: 15px;
         }
+        /* --- MODIFICATION END --- */
+
         .modal-button {
             background: var(--modal-accent); color: white; border: none; padding: 16px 50px;
             font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%; max-width: 300px;
@@ -320,28 +341,24 @@
 
     <div class="snow-container" id="snow-container"></div>
 
-    <!-- SVG Icon Definitions -->
     <svg width="0" height="0" style="position:absolute;z-index:-1;">
         <defs>
             <symbol id="icon-moon" viewBox="0 0 100 100"><path d="M 95,50 A 45,45 0 1,1 50,5 A 30,30 0 1,0 95,50 Z" /></symbol>
             <symbol id="icon-star" viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,96 50,75 21,96 32,62 2,40 39,40" /></symbol>
-            <symbol id="icon-tennis" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke-width="0"/><path d="M 15,35 C 40,65 60,45 85,75" stroke-width="8" stroke="white" fill="none" /></symbol>
             <symbol id="icon-sun" viewBox="0 0 100 100"><g fill="#E84A28"><g stroke="#E84A28" stroke-width="7" stroke-linecap="round"><line x1="50" y1="22" x2="50" y2="7"/><line x1="70" y1="30" x2="82" y2="18"/><line x1="78" y1="50" x2="93" y2="50"/><line x1="70" y1="70" x2="82" y2="82"/><line x1="50" y1="78" x2="50" y2="93"/><line x1="30" y1="70" x2="18" y2="82"/><line x1="22" y1="50" x2="7" y2="50"/><line x1="30" y1="30" x2="18" y2="18"/></g><circle cx="47" cy="48" r="23"/><circle cx="53" cy="52" r="23"/></g></symbol>
             <symbol id="icon-heart" viewBox="0 0 100 100"><path d="M50,30 C20,0 0,25 0,45 C0,75 50,100 50,100 C50,100 100,75 100,45 C100,25 80,0 50,30 Z"/></symbol>
-            <symbol id="icon-sparkle" viewBox="0 0 100 100"><path d="M50 0 L61.2 38.8 L100 50 L61.2 61.2 L50 100 L38.8 61.2 L0 50 L38.8 38.8 Z" /></symbol>
+            <symbol id="icon-tennis" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke-width="0"/><path d="M 15,35 C 40,65 60,45 85,75" stroke-width="8" stroke="white" fill="none" /></symbol>
         </defs>
     </svg>
 
     <div class="main-wrapper">
         <div class="game-container">
             <h1>
-                <svg class="title-icon"><use xlink:href="#icon-sparkle"></use></svg>
-                <span>點點心連心</span>
-                <svg class="title-icon"><use xlink:href="#icon-sparkle"></use></svg>
+                <img src="2.PNG" alt="icon" class="title-icon">
+                <span>記憶大考驗</span>
+                <img src="2.PNG" alt="icon" class="title-icon">
             </h1>
-            <!-- --- MODIFICATION START --- -->
-            <p class="instructions">翻開二張相同的牌卡，看看有什麼指引吧！</p>
-            <!-- --- MODIFICATION END --- -->
+            <p class="instructions">只要翻開二張相同的牌卡，就有大驚喜！</p>
             <div class="memory-game" id="gameBoard"></div>
         </div>
         <div class="controls">
@@ -367,24 +384,16 @@
 
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
         let mahayanaData = [];
-
-        const cardArray = [
-            { name: 'star-green', svgId: 'icon-star' }, { name: 'moon-pink', svgId: 'icon-moon' },
-            { name: 'heart-orange', svgId: 'icon-heart' }, { name: 'sun-red', svgId: 'icon-sun' },
-            { name: 'tennis-ball', svgId: 'icon-tennis' }, { name: 'star-blue', svgId: 'icon-star' },
-            { name: 'star-green', svgId: 'icon-star' }, { name: 'star-blue', svgId: 'icon-star' },
-            { name: 'moon-pink', svgId: 'icon-moon' }, { name: 'heart-orange', svgId: 'icon-heart' },
-            { name: 'sun-red', svgId: 'icon-sun' }, { name: 'tennis-ball', svgId: 'icon-tennis' },
-            // To make it a 2-match game, we need pairs. Let's adjust the array.
-            // The original array has non-pair counts for some items. Let's create pairs.
-            // Simplified for a standard memory game: 8 pairs for 16 cards.
-        ];
         
         const baseCards = [
-            { name: 'star-green', svgId: 'icon-star' }, { name: 'moon-pink', svgId: 'icon-moon' },
-            { name: 'heart-orange', svgId: 'icon-heart' }, { name: 'sun-red', svgId: 'icon-sun' },
-            { name: 'tennis-ball', svgId: 'icon-tennis' }, { name: 'star-blue', svgId: 'icon-star' },
-            { name: 'sparkle-gold', svgId: 'icon-sparkle' }, { name: 'moon-alt', svgId: 'icon-moon' }
+            { name: 'star-green', svgId: 'icon-star' },
+            { name: 'moon-pink', svgId: 'icon-moon' },
+            { name: 'heart-orange', svgId: 'icon-heart' },
+            { name: 'sun-red', svgId: 'icon-sun' },
+            { name: 'star-blue', svgId: 'icon-star' },
+            { name: 'tennis-ball', svgId: 'icon-tennis' },
+            { name: 'star-green-2', svgId: 'icon-star' },
+            { name: 'moon-pink-2', svgId: 'icon-moon' }
         ];
 
         let gameCards = [...baseCards, ...baseCards]; // Creates pairs
@@ -434,7 +443,6 @@
             });
         }
         
-        // --- MODIFICATION START ---
         function handleCardClick(card) {
             if (lockBoard || card.classList.contains('is-flipped') || selectedCards.length >= 2) return;
 
@@ -449,17 +457,18 @@
 
         function checkForMatch() {
             const [card1, card2] = selectedCards;
-            const isMatch = card1.dataset.card === card2.dataset.card;
+            
+            const card1Icon = card1.querySelector('use').getAttribute('xlink:href');
+            const card2Icon = card2.querySelector('use').getAttribute('xlink:href');
+
+            const isMatch = card1Icon === card2Icon;
 
             if (isMatch) {
-                // It's a match! The game ends.
                 setTimeout(showGuidance, 600);
             } else {
-                // Not a match, flip them back.
                 setTimeout(unflipCards, 1500);
             }
         }
-        // --- MODIFICATION END ---
 
         function unflipCards() {
             selectedCards.forEach(card => card.classList.remove('is-flipped'));
@@ -519,7 +528,6 @@
             loadSheetData();
             createSnowflakes();
             
-            // Comprehensive touch zoom prevention
             document.addEventListener('touchend', (event) => {
                 const now = (new Date()).getTime();
                 if (now - (window.lastTouchEnd || 0) <= 300) {
