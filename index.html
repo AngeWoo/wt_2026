@@ -316,15 +316,13 @@
         }
         .modal-header h3 { font-size: 26px; color: var(--modal-title-text); font-weight: bold; margin-bottom: 25px; }
         
-        /* --- MODIFICATION START --- */
         .modal-message-container {
             font-size: 20px; line-height: 1.8; color: var(--modal-text);
-            text-align: left; /* Changed from 'center' to 'left' */
+            text-align: left;
             margin-bottom: 30px; padding: 25px;
             background: var(--modal-content-bg); border: 1px solid var(--modal-border);
             border-radius: 15px;
         }
-        /* --- MODIFICATION END --- */
 
         .modal-button {
             background: var(--modal-accent); color: white; border: none; padding: 16px 50px;
@@ -335,6 +333,54 @@
         @media (hover: hover) and (pointer: fine) {
             .modal-button:hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); }
         }
+
+        /* --- DESKTOP OPTIMIZATION START --- */
+        @media (min-width: 768px) {
+            /* 1. Increase overall container size for better viewing on larger screens */
+            .main-wrapper {
+                max-width: 650px;
+                gap: 35px;
+            }
+
+            /* 2. Add more padding inside the game container */
+            .game-container {
+                padding: 40px;
+                border-radius: 25px;
+            }
+
+            /* 3. Make the title larger */
+            h1 {
+                font-size: 3.2em;
+                margin-bottom: 20px;
+            }
+            h1 .title-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            /* 4. Slightly increase instruction text size */
+            .instructions {
+                font-size: 1.2em;
+                margin-bottom: 40px;
+            }
+
+            /* 5. Make the game board and cards larger */
+            .memory-game {
+                max-width: 500px;
+                gap: 16px;
+            }
+            .card-face {
+                border-radius: 20px;
+            }
+
+            /* 6. Make the button larger */
+            .btn {
+                padding: 20px 40px;
+                font-size: 1.3em;
+            }
+        }
+        /* --- DESKTOP OPTIMIZATION END --- */
+
     </style>
 </head>
 <body>
@@ -354,9 +400,9 @@
     <div class="main-wrapper">
         <div class="game-container">
             <h1>
-                <img src="2.png" alt="icon" class="title-icon">
+                <img src="2.PNG" alt="icon" class="title-icon">
                 <span>記憶大考驗</span>
-                <img src="2.png" alt="icon" class="title-icon">
+                <img src="2.PNG" alt="icon" class="title-icon">
             </h1>
             <p class="instructions">只要翻開二張相同的牌卡，就有大驚喜！</p>
             <div class="memory-game" id="gameBoard"></div>
