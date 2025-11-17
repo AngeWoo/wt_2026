@@ -143,13 +143,17 @@
             justify-content: center;
             align-items: center;
             white-space: nowrap;
+            line-height: 1;
         }
         
         h1 .title-icon {
-            width: 50px;
-            height: 50px;
-            margin: 0 8px;
+            width: 55px;
+            height: 55px;
+            margin: 0 10px;
             filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+            display: inline-block;
+            position: relative;
+            top: 2px;
         }
 
         @media (max-width: 480px) {
@@ -158,8 +162,11 @@
                 margin-bottom: 12px;
             }
             h1 .title-icon {
-                width: 40px;
-                height: 40px;
+                width: 45px;
+                height: 45px;
+                display: inline-block;
+                position: relative;
+                top: 2px;
             }
         }
         
@@ -339,7 +346,10 @@
             .main-wrapper { max-width: 650px; gap: 35px; }
             .game-container { padding: 40px; border-radius: 25px; }
             h1 { font-size: 3.2em; margin-bottom: 20px; }
-            h1 .title-icon { width: 60px; height: 60px; }
+            h1 .title-icon {
+                width: 65px;
+                height: 65px;
+            }
             .instructions { font-size: 1.2em; margin-bottom: 40px; }
             .memory-game { max-width: 500px; gap: 16px; }
             .card-face { border-radius: 20px; }
@@ -365,9 +375,10 @@
 
     <div class="main-wrapper">
         <div class="game-container">
+            <!-- 【已修改】移除 h1 標題文字外層的 span 標籤，讓 Flexbox 能更準確地垂直置中 -->
             <h1>
                 <img src="2.png" alt="icon" class="title-icon">
-                <span>記憶大考驗</span>
+                記憶大考驗
                 <img src="2.png" alt="icon" class="title-icon">
             </h1>
             <p class="instructions">只要翻開二張相同的牌卡，就有大驚喜！</p>
@@ -397,9 +408,6 @@
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
         let mahayanaData = [];
         
-        // 【已修正】
-        // 統一了 'star-green' 和 'moon-pink' 的名稱，移除了 '-2' 後綴。
-        // 這可以確保所有看起來一樣的卡片在程式碼中也被視為相同，解決了無法配對的問題。
         const baseCards = [
             { name: 'star-green', svgId: 'icon-star' },
             { name: 'moon-pink', svgId: 'icon-moon' },
@@ -473,7 +481,6 @@
         function checkForMatch() {
             const [card1, card2] = selectedCards;
             
-            // 這個比對邏輯現在是正確的，因為我們修正了源頭的 data-card 名稱
             const isMatch = card1.dataset.card === card2.dataset.card;
 
             if (isMatch) {
