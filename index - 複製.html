@@ -105,6 +105,7 @@
             .main-wrapper {
                 gap: 20px;
                 padding: 16px 12px;
+                justify-content: flex-start; /* 【已修改】改為向上貼齊 */
             }
         }
         
@@ -143,23 +144,31 @@
             justify-content: center;
             align-items: center;
             white-space: nowrap;
+            line-height: 1;
         }
         
         h1 .title-icon {
-            width: 50px;
-            height: 50px;
-            margin: 0 8px;
+            width: 55px;
+            height: 55px;
+            margin: 0 10px;
             filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+            display: inline-block;
+            position: relative;
+            top: 2px;
         }
 
         @media (max-width: 480px) {
             h1 {
-                font-size: clamp(2.0em, 8vw, 2.2em);
-                margin-bottom: 12px;
+                font-size: clamp(2.4em, 9vw, 2.6em); /* 加大字體 */
+                margin-bottom: 30px; /* 增加標題下方間距 */
+                font-weight: 400; /* 取消粗體 */
             }
             h1 .title-icon {
-                width: 40px;
-                height: 40px;
+                width: 45px;
+                height: 45px;
+                display: inline-block;
+                position: relative;
+                top: 2px;
             }
         }
         
@@ -189,8 +198,9 @@
             perspective: 1000px; /* For 3D flip effect */
         }
         
-        @media (max-width: 480px) { .memory-game { gap: 10px; } }
-        @media (max-width: 360px) { .memory-game { gap: 8px; } }
+        /* 加大手機版卡牌間距 */
+        @media (max-width: 480px) { .memory-game { gap: 15px; } } 
+        @media (max-width: 360px) { .memory-game { gap: 10px; } }
 
         .memory-card {
             width: 100%;
@@ -236,6 +246,24 @@
             width: 70%; 
             height: 70%;
         }
+
+        /* --- 手機版卡片長方形調整 --- */
+        @media (max-width: 480px) {
+            .memory-card {
+                aspect-ratio: 3 / 4; /* 將卡片寬高比改為 3:4 (寬:高) */
+            }
+            .card-face {
+                border-radius: 12px; /* 配合長方形，微調圓角 */
+            }
+            .card-face svg {
+                width: 75%; /* 調整圖示大小以適應新比例 */
+                height: 75%;
+            }
+            .back-face {
+                font-size: clamp(2em, 7vw, 2.5em); /* 讓數字也大一點 */
+            }
+        }
+        /* --- 手機版卡片長方形調整 END --- */
         
         [data-card="moon-pink"] .front-face,
         [data-card="moon-pink-2"] .front-face { background-color: #F8DCDA; }
@@ -336,48 +364,17 @@
 
         /* --- DESKTOP OPTIMIZATION START --- */
         @media (min-width: 768px) {
-            /* 1. Increase overall container size for better viewing on larger screens */
-            .main-wrapper {
-                max-width: 650px;
-                gap: 35px;
-            }
-
-            /* 2. Add more padding inside the game container */
-            .game-container {
-                padding: 40px;
-                border-radius: 25px;
-            }
-
-            /* 3. Make the title larger */
-            h1 {
-                font-size: 3.2em;
-                margin-bottom: 20px;
-            }
+            .main-wrapper { max-width: 650px; gap: 35px; }
+            .game-container { padding: 40px; border-radius: 25px; }
+            h1 { font-size: 3.2em; margin-bottom: 20px; }
             h1 .title-icon {
-                width: 60px;
-                height: 60px;
+                width: 65px;
+                height: 65px;
             }
-
-            /* 4. Slightly increase instruction text size */
-            .instructions {
-                font-size: 1.2em;
-                margin-bottom: 40px;
-            }
-
-            /* 5. Make the game board and cards larger */
-            .memory-game {
-                max-width: 500px;
-                gap: 16px;
-            }
-            .card-face {
-                border-radius: 20px;
-            }
-
-            /* 6. Make the button larger */
-            .btn {
-                padding: 20px 40px;
-                font-size: 1.3em;
-            }
+            .instructions { font-size: 1.2em; margin-bottom: 40px; }
+            .memory-game { max-width: 500px; gap: 16px; }
+            .card-face { border-radius: 20px; }
+            .btn { padding: 20px 40px; font-size: 1.3em; }
         }
         /* --- DESKTOP OPTIMIZATION END --- */
 
@@ -401,14 +398,14 @@
         <div class="game-container">
             <h1>
                 <img src="2.png" alt="icon" class="title-icon">
-                <span>記憶大考驗</span>
+                記憶大考驗
                 <img src="2.png" alt="icon" class="title-icon">
             </h1>
             <p class="instructions">只要翻開二張相同的牌卡，就有大驚喜！</p>
             <div class="memory-game" id="gameBoard"></div>
         </div>
         <div class="controls">
-            <button class="btn" onclick="startNewGame()">立馬前行GOGOGO</button>
+            <button class="btn" onclick="location.reload()">立馬前行GOGOGO</button>
         </div>
     </div>
 
@@ -438,8 +435,8 @@
             { name: 'sun-red', svgId: 'icon-sun' },
             { name: 'star-blue', svgId: 'icon-star' },
             { name: 'tennis-ball', svgId: 'icon-tennis' },
-            { name: 'star-green-2', svgId: 'icon-star' },
-            { name: 'moon-pink-2', svgId: 'icon-moon' }
+            { name: 'star-green', svgId: 'icon-star' },
+            { name: 'moon-pink', svgId: 'icon-moon' }
         ];
 
         let gameCards = [...baseCards, ...baseCards]; // Creates pairs
@@ -504,10 +501,7 @@
         function checkForMatch() {
             const [card1, card2] = selectedCards;
             
-            const card1Icon = card1.querySelector('use').getAttribute('xlink:href');
-            const card2Icon = card2.querySelector('use').getAttribute('xlink:href');
-
-            const isMatch = card1Icon === card2Icon;
+            const isMatch = card1.dataset.card === card2.dataset.card;
 
             if (isMatch) {
                 setTimeout(showGuidance, 600);

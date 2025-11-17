@@ -105,6 +105,7 @@
             .main-wrapper {
                 gap: 20px;
                 padding: 16px 12px;
+                justify-content: flex-start; /* 【已修改】改為向上貼齊 */
             }
         }
         
@@ -158,8 +159,9 @@
 
         @media (max-width: 480px) {
             h1 {
-                font-size: clamp(2.0em, 8vw, 2.2em);
-                margin-bottom: 12px;
+                font-size: clamp(2.4em, 9vw, 2.6em); /* 加大字體 */
+                margin-bottom: 30px; /* 增加標題下方間距 */
+                font-weight: 400; /* 取消粗體 */
             }
             h1 .title-icon {
                 width: 45px;
@@ -196,8 +198,9 @@
             perspective: 1000px; /* For 3D flip effect */
         }
         
-        @media (max-width: 480px) { .memory-game { gap: 10px; } }
-        @media (max-width: 360px) { .memory-game { gap: 8px; } }
+        /* 加大手機版卡牌間距 */
+        @media (max-width: 480px) { .memory-game { gap: 15px; } } 
+        @media (max-width: 360px) { .memory-game { gap: 10px; } }
 
         .memory-card {
             width: 100%;
@@ -243,6 +246,24 @@
             width: 70%; 
             height: 70%;
         }
+
+        /* --- 手機版卡片長方形調整 --- */
+        @media (max-width: 480px) {
+            .memory-card {
+                aspect-ratio: 3 / 4; /* 將卡片寬高比改為 3:4 (寬:高) */
+            }
+            .card-face {
+                border-radius: 12px; /* 配合長方形，微調圓角 */
+            }
+            .card-face svg {
+                width: 75%; /* 調整圖示大小以適應新比例 */
+                height: 75%;
+            }
+            .back-face {
+                font-size: clamp(2em, 7vw, 2.5em); /* 讓數字也大一點 */
+            }
+        }
+        /* --- 手機版卡片長方形調整 END --- */
         
         [data-card="moon-pink"] .front-face,
         [data-card="moon-pink-2"] .front-face { background-color: #F8DCDA; }
@@ -375,7 +396,6 @@
 
     <div class="main-wrapper">
         <div class="game-container">
-            <!-- 【已修改】移除 h1 標題文字外層的 span 標籤，讓 Flexbox 能更準確地垂直置中 -->
             <h1>
                 <img src="2.png" alt="icon" class="title-icon">
                 記憶大考驗
@@ -385,7 +405,7 @@
             <div class="memory-game" id="gameBoard"></div>
         </div>
         <div class="controls">
-            <button class="btn" onclick="startNewGame()">立馬前行GOGOGO</button>
+            <button class="btn" onclick="location.reload()">立馬前行GOGOGO</button>
         </div>
     </div>
 
