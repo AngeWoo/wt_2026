@@ -105,7 +105,7 @@
             .main-wrapper {
                 gap: 20px;
                 padding: 16px 12px;
-                justify-content: flex-start; /* 【已修改】改為向上貼齊 */
+                justify-content: space-between; /* 保持上下貼齊 */
             }
         }
         
@@ -256,7 +256,7 @@
                 border-radius: 12px; /* 配合長方形，微調圓角 */
             }
             .card-face svg {
-                width: 75%; /* 調整圖示大小以適應新比例 */
+                width: 75%; /* 調整圖示大小以適應 new-symbol */
                 height: 75%;
             }
             .back-face {
@@ -284,6 +284,20 @@
         [data-card="tennis-ball"] .front-face { background-color: #C9D8C5; }
         [data-card="tennis-ball"] svg { fill: #97B53F; }
 
+        /* 【已修改】LOGO 樣式 (懸浮在上層，再次調整垂直位置) */
+        .hero-logo {
+            position: fixed; /* 懸浮 */
+            z-index: 99; /* 顯示在遊戲容器(10)之上，彈出視窗(1000)之下 */
+            width: 60%;
+            max-width: 220px; /* 縮小尺寸 */
+            height: auto;
+            left: 50%;
+            top: 85%; /* 【已修改】調整垂直位置到 85% 處 (原為 75%) */
+            transform: translate(-50%, -50%); /* 垂直水平置中於 (50%, 85%) 點 */
+            pointer-events: none; /* 點擊穿透 */
+            opacity: 0.7; /* 透明度 */
+        }
+        
         .controls {
             width: 100%;
             display: flex;
@@ -394,6 +408,8 @@
         </defs>
     </svg>
 
+    <img src="hero-logo.png" alt="集修行" class="hero-logo">
+
     <div class="main-wrapper">
         <div class="game-container">
             <h1>
@@ -404,6 +420,7 @@
             <p class="instructions">只要翻開二張相同的牌卡，就有大驚喜！</p>
             <div class="memory-game" id="gameBoard"></div>
         </div>
+
         <div class="controls">
             <button class="btn" onclick="location.reload()">立馬前行GOGOGO</button>
         </div>
@@ -412,7 +429,7 @@
     <div class="modal" id="guidanceModal">
         <div class="modal-content">
             <div class="modal-icon"></div>
-            <div class="modal-header"><h3 id="modalTitle"></h3></div>
+            <div classs="modal-header"><h3 id="modalTitle"></h3></div>
             <div class="modal-message-container" id="guidanceMessage"></div>
             <button class="modal-button" id="closeModalBtn">立馬前行GOGOGO</button>
         </div>
