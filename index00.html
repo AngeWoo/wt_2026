@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <title>歡修行記憶大考驗</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+        
+        :root {
+            /* 彈出視窗的色系 */
+            --modal-bg: #F8F4F0;
+            --modal-content-bg: #FBF9F6;
+            --modal-accent: #C8A987;
+            --modal-title-text: #8D6E63;
+            --modal-text: #5c5248;
+            --modal-border: #EAE2D9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* 全局防止縮放 */
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            background-color: #F4F0E9;
+            font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
+            min-height: 100vh;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            position: relative;
+        }
+        
+        /* 手機版優化 */
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+        }
+
+        .snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            margin: 0;
+            padding: 0;
+        }
+
+        .snowflake {
+            position: absolute;
+            background: rgba(117, 92, 72, 0.15);
+            border-radius: 50%;
+            animation: snowfall linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes snowfall {
+            0% { transform: translateY(-5vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(105vh) translateX(-30px); opacity: 0; }
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 25px; 
+            width: 100%;
+            max-width: 450px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+            margin: 0 auto;
+            padding: 20px 16px;
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 480px) {
+            .main-wrapper {
+                gap: 20px;
+                padding: 16px 12px;
+                justify-content: space-between; /* 保持上下貼齊 */
+            }
+        }
+        
+        .game-container {
+            background: #FAF7F2; 
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+            touch-action: manipulation;
+            margin: 0;
+        }
+        
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 20px;
+                border-radius: 15px;
+            }
+        }
+
+        h1 {
+            color: #755C48; 
+            margin: 0 0 15px 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2.4em, 8vw, 2.8em);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-shadow: 
+                1px 1px 0px rgba(90, 70, 60, 0.6),
+                2px 2px 0px rgba(90, 70, 60, 0.6),
+                3px 3px 0px rgba(90, 70, 60, 0.6),
+                4px 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            white-space: nowrap;
+            line-height: 1;
+        }
+        
+        h1 .title-icon {
+            width: 55px;
+            height: 55px;
+            margin: 0 10px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+            display: inline-block;
+            position: relative;
+            top: 2px;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: clamp(2.4em, 9vw, 2.6em); /* 加大字體 */
+                margin-bottom: 30px; /* 增加標題下方間距 */
+                font-weight: 400; /* 取消粗體 */
+            }
+            h1 .title-icon {
+                width: 45px;
+                height: 45px;
+                display: inline-block;
+                position: relative;
+                top: 2px;
+            }
+        }
+        
+        .instructions {
+            color: #A1887F;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 480px) {
+            .instructions {
+                font-size: 1em;
+                margin-bottom: 20px;
+            }
+        }
+
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr)); 
+            gap: 12px;
+            width: 100%;
+            max-width: 360px;
+            margin: 0 auto;
+            touch-action: manipulation;
+            perspective: 1000px; /* For 3D flip effect */
+        }
+        
+        /* 加大手機版卡牌間距 */
+        @media (max-width: 480px) { .memory-game { gap: 15px; } } 
+        @media (max-width: 360px) { .memory-game { gap: 10px; } }
+
+        .memory-card {
+            width: 100%;
+            aspect-ratio: 1;
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .memory-card.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .front-face {
+            transform: rotateY(180deg);
+        }
+
+        .back-face {
+            background: #EACDA3;
+            background-image: linear-gradient(135deg, #EACDA3 0%, #D6AE7B 100%);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: clamp(1.5em, 5vw, 2em);
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-face svg {
+            width: 70%; 
+            height: 70%;
+        }
+
+        /* --- 手機版卡片長方形調整 --- */
+        @media (max-width: 480px) {
+            .memory-card {
+                aspect-ratio: 3 / 4; /* 將卡片寬高比改為 3:4 (寬:高) */
+            }
+            .card-face {
+                border-radius: 12px; /* 配合長方形，微調圓角 */
+            }
+            .card-face svg {
+                width: 75%; /* 調整圖示大小以適應 new-symbol */
+                height: 75%;
+            }
+            .back-face {
+                font-size: clamp(2em, 7vw, 2.5em); /* 讓數字也大一點 */
+            }
+        }
+        /* --- 手機版卡片長方形調整 END --- */
+        
+        /* 卡牌樣式 */
+        [data-card="moon-pink"] .front-face { background-color: #F8DCDA; }
+        [data-card="moon-pink"] svg { fill: #F7D94C; }
+        
+        [data-card="star-green"] .front-face { background-color: #F9F3D0; }
+        [data-card="star-green"] svg { fill: #2C9D5D; }
+
+        [data-card="star-blue"] .front-face { background-color: #E3F2FD; }
+        [data-card="star-blue"] svg { fill: #42A5F5; }
+        [data-card="sun-red"] .front-face { background-color: #D9E2E0; }
+        [data-card="sun-red"] svg { fill: #E84A28; }
+        [data-card="heart-orange"] .front-face { background-color: #F8DCDA; }
+        [data-card="heart-orange"] svg { fill: #E67E22; }
+        [data-card="tennis-ball"] .front-face { background-color: #C9D8C5; }
+        [data-card="tennis-ball"] svg { fill: #97B53F; }
+
+        .hero-logo {
+            position: fixed; /* 懸浮 */
+            z-index: 99; /* 顯示在遊戲容器(10)之上，彈出視窗(1000)之下 */
+            width: 60%;
+            max-width: 220px; /* 縮小尺寸 */
+            height: auto;
+            left: 50%;
+            top: 85%;
+            transform: translate(-50%, -50%); /* 垂直水平置中於 (50%, 85%) 點 */
+            pointer-events: none; /* 點擊穿透 */
+            opacity: 0.7; /* 透明度 */
+        }
+        
+        .controls {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn {
+            background: #EACDA3;
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease;
+            width: 100%;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        @media (max-width: 480px) {
+            .btn {
+                font-size: 1.1em;
+                padding: 14px 25px;
+            }
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .btn:hover {
+                box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            }
+        }
+        
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(80, 70, 60, 0.6); backdrop-filter: blur(5px);
+            z-index: 1000; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease; padding: 20px;
+            touch-action: manipulation;
+        }
+        .modal.show { display: flex; opacity: 1; }
+        .modal-content {
+            background: var(--modal-bg); border-radius: 25px; padding: 25px 30px 30px;
+            max-width: 480px; width: 100%; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative; text-align: center;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+        }
+        .modal.show .modal-content { transform: scale(1); }
+        .modal-icon {
+            width: 120px; height: 120px; margin: -20px auto 20px;
+            background-color: var(--modal-accent);
+            -webkit-mask-image: url(slogo.png); mask-image: url(slogo.png);
+            -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;
+        }
+        .modal-header h3 { font-size: 26px; color: var(--modal-title-text); font-weight: bold; margin-bottom: 25px; }
+        
+        .modal-message-container {
+            font-size: 20px; line-height: 1.8; color: var(--modal-text);
+            text-align: left;
+            margin-bottom: 30px; padding: 25px;
+            background: var(--modal-content-bg); border: 1px solid var(--modal-border);
+            border-radius: 15px;
+        }
+
+        .modal-button {
+            background: var(--modal-accent); color: white; border: none; padding: 16px 50px;
+            font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%; max-width: 300px;
+            display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .modal-button:hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); }
+        }
+
+        /* --- DESKTOP OPTIMIZATION START --- */
+        @media (min-width: 768px) {
+            .main-wrapper { max-width: 650px; gap: 35px; }
+            .game-container { padding: 40px; border-radius: 25px; }
+            h1 { font-size: 3.2em; margin-bottom: 20px; }
+            h1 .title-icon {
+                width: 65px;
+                height: 65px;
+            }
+            .instructions { font-size: 1.2em; margin-bottom: 40px; }
+            .memory-game { max-width: 500px; gap: 16px; }
+            .card-face { border-radius: 20px; }
+            .btn { padding: 20px 40px; font-size: 1.3em; }
+        }
+        /* --- DESKTOP OPTIMIZATION END --- */
+
+    </style>
+</head>
+<body>
+
+    <div class="snow-container" id="snow-container"></div>
+
+    <svg width="0" height="0" style="position:absolute;z-index:-1;">
+        <defs>
+            <symbol id="icon-moon" viewBox="0 0 100 100"><path d="M 95,50 A 45,45 0 1,1 50,5 A 30,30 0 1,0 95,50 Z" /></symbol>
+            <symbol id="icon-star" viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,96 50,75 21,96 32,62 2,40 39,40" /></symbol>
+            <symbol id="icon-sun" viewBox="0 0 100 100"><g fill="#E84A28"><g stroke="#E84A28" stroke-width="7" stroke-linecap="round"><line x1="50" y1="22" x2="50" y2="7"/><line x1="70" y1="30" x2="82" y2="18"/><line x1="78" y1="50" x2="93" y2="50"/><line x1="70" y1="70" x2="82" y2="82"/><line x1="50" y1="78" x2="50" y2="93"/><line x1="30" y1="70" x2="18" y2="82"/><line x1="22" y1="50" x2="7" y2="50"/><line x1="30" y1="30" x2="18" y2="18"/></g><circle cx="47" cy="48" r="23"/><circle cx="53" cy="52" r="23"/></g></symbol>
+            <symbol id="icon-heart" viewBox="0 0 100 100"><path d="M50,30 C20,0 0,25 0,45 C0,75 50,100 50,100 C50,100 100,75 100,45 C100,25 80,0 50,30 Z"/></symbol>
+            <symbol id="icon-tennis" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke-width="0"/><path d="M 15,35 C 40,65 60,45 85,75" stroke-width="8" stroke="white" fill="none" /></symbol>
+        </defs>
+    </svg>
+
+    <img src="hero-logo.png" alt="集修行" class="hero-logo">
+
+    <div class="main-wrapper">
+        <div class="game-container">
+            <h1>
+                <img src="2.png" alt="icon" class="title-icon">
+                記憶大考驗
+                <img src="2.png" alt="icon" class="title-icon">
+            </h1>
+            <p class="instructions">只要翻開三張相同的牌卡，就有大驚喜！</p>
+            <div class="memory-game" id="gameBoard"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="location.reload()">立馬前行GOGOGO</button>
+        </div>
+    </div>
+
+    <div class="modal" id="guidanceModal">
+        <div class="modal-content">
+            <div class="modal-icon"></div>
+            <div classs="modal-header"><h3 id="modalTitle"></h3></div>
+            <div class="modal-message-container" id="guidanceMessage"></div>
+            <button class="modal-button" id="closeModalBtn">立馬前行GOGOGO</button>
+        </div>
+    </div>
+
+    <script>
+        const gameBoard = document.getElementById('gameBoard');
+        const modal = document.getElementById('guidanceModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalTitleEl = document.getElementById('modalTitle');
+        const guidanceMessageEl = document.getElementById('guidanceMessage');
+
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
+        let mahayanaData = [];
+        
+        // 【修改】還原為最初的 6 種卡牌類型，確保名稱與外觀唯一對應
+        const allCardTypes = [
+            { name: 'star-green', svgId: 'icon-star' },
+            { name: 'moon-pink', svgId: 'icon-moon' },
+            { name: 'heart-orange', svgId: 'icon-heart' },
+            { name: 'sun-red', svgId: 'icon-sun' },
+            { name: 'star-blue', svgId: 'icon-star' },
+            { name: 'tennis-ball', svgId: 'icon-tennis' },
+        ];
+
+        let gameCards = [];
+        let selectedCards = [];
+        let lockBoard = false;
+
+        async function loadSheetData() {
+            try {
+                const response = await fetch(CSV_URL);
+                if (!response.ok) throw new Error('網路回應錯誤');
+                const csvText = await response.text();
+                const messages = csvText.split('\n').slice(1).map(line => line.trim().replace(/^"|"$/g, '')).filter(line => line);
+                if (messages.length > 0) { mahayanaData = messages; } else { throw new Error('CSV 檔案為空'); }
+            } catch (error) {
+                console.error('資料載入失敗:', error);
+                mahayanaData = ["(提醒) 資料載入失敗，請檢查網路連線。", "(祝福) 願您的每一天都充滿平靜與喜悅。"];
+            }
+        }
+
+        function shuffle(array) {
+            array.sort(() => 0.5 - Math.random());
+        }
+
+        function createBoard() {
+            // 【修改】使用新的卡牌分佈邏輯，確保遊戲公平且有趣
+            // 16張牌 = 1組四張 + 2組三張 + 3組兩張
+            gameCards = [];
+            let types = [...allCardTypes];
+            shuffle(types);
+
+            // 1. 產生一組四張的干擾牌
+            const quadType = types.pop();
+            gameCards.push(quadType, quadType, quadType, quadType);
+
+            // 2. 產生兩組三張的致勝牌
+            const tripletType1 = types.pop();
+            const tripletType2 = types.pop();
+            gameCards.push(tripletType1, tripletType1, tripletType1);
+            gameCards.push(tripletType2, tripletType2, tripletType2);
+
+            // 3. 產生三組兩張的干擾牌
+            const pairType1 = types.pop();
+            const pairType2 = types.pop();
+            const pairType3 = types.pop();
+            gameCards.push(pairType1, pairType1);
+            gameCards.push(pairType2, pairType2);
+            gameCards.push(pairType3, pairType3);
+
+            // 4. 將所有卡牌徹底洗牌
+            shuffle(gameCards);
+            
+            gameBoard.innerHTML = '';
+            selectedCards = [];
+            lockBoard = false;
+
+            gameCards.forEach((item, index) => { 
+                const card = document.createElement('div');
+                card.classList.add('memory-card');
+                card.dataset.card = item.name;
+
+                card.innerHTML = `
+                    <div class="card-face front-face">
+                        <svg><use xlink:href="#${item.svgId}"></use></svg>
+                    </div>
+                    <div class="card-face back-face">
+                        ${index + 1}
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => handleCardClick(card));
+                gameBoard.appendChild(card);
+            });
+        }
+        
+        function handleCardClick(card) {
+            if (lockBoard || card.classList.contains('is-flipped') || selectedCards.length >= 3) return;
+
+            card.classList.add('is-flipped');
+            selectedCards.push(card);
+
+            if (selectedCards.length === 3) {
+                lockBoard = true;
+                checkForMatch();
+            }
+        }
+
+        function checkForMatch() {
+            const [card1, card2, card3] = selectedCards;
+            
+            // 只要三張牌的 data-card 完全一樣，就視為成功
+            const isMatch = card1.dataset.card === card2.dataset.card && card2.dataset.card === card3.dataset.card;
+
+            if (isMatch) {
+                setTimeout(showGuidance, 600);
+            } else {
+                setTimeout(unflipCards, 1500);
+            }
+        }
+
+        function unflipCards() {
+            selectedCards.forEach(card => card.classList.remove('is-flipped'));
+            selectedCards = [];
+            lockBoard = false;
+        }
+        
+        function showGuidance() {
+            const allCards = document.querySelectorAll('.memory-card');
+            allCards.forEach(card => card.classList.add('is-flipped'));
+
+            setTimeout(() => {
+                if (mahayanaData.length < 1) {
+                    modalTitleEl.textContent = '提醒';
+                    guidanceMessageEl.textContent = '資料不足，無法提供指引。';
+                } else {
+                    const randomMessage = mahayanaData[Math.floor(Math.random() * mahayanaData.length)];
+                    const match = randomMessage.match(/\(([^)]+)\)(.*)/s); 
+                    if (match && match[1] && match[2]) {
+                        modalTitleEl.textContent = `(摘錄自) ${match[1].trim()}`;
+                        guidanceMessageEl.innerHTML = match[2].trim().replace(/\n/g, '<br>');
+                    } else {
+                        modalTitleEl.textContent = '修行指引';
+                        guidanceMessageEl.innerHTML = randomMessage.trim().replace(/\n/g, '<br>');
+                    }
+                }
+                modal.classList.add('show');
+            }, 500);
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+            setTimeout(startNewGame, 300);
+        }
+
+        function startNewGame() {
+            createBoard();
+        }
+
+        function createSnowflakes() {
+            const container = document.getElementById('snow-container');
+            if (!container) return;
+            const snowflakeCount = 100;
+            let snowflakesHTML = '';
+            for (let i = 0; i < snowflakeCount; i++) {
+                const size = Math.random() * 4 + 2;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 10 + 10;
+                const delay = Math.random() * 15;
+                snowflakesHTML += `<div class="snowflake" style="width:${size}px; height:${size}px; left:${left}%; animation-duration:${duration}s; animation-delay:${delay}s;"></div>`;
+            }
+            container.innerHTML = snowflakesHTML;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            startNewGame();
+            loadSheetData();
+            createSnowflakes();
+            
+            document.addEventListener('touchend', (event) => {
+                const now = (new Date()).getTime();
+                if (now - (window.lastTouchEnd || 0) <= 300) {
+                    event.preventDefault();
+                }
+                window.lastTouchEnd = now;
+            }, { passive: false });
+            
+            document.addEventListener('gesturestart', (event) => event.preventDefault(), { passive: false });
+            document.addEventListener('wheel', (event) => { if (event.ctrlKey) event.preventDefault(); }, { passive: false });
+            document.body.addEventListener('touchstart', (e) => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
+            document.body.addEventListener('touchmove', (e) => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
+        });
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    </script>
+</body>
+</html>
