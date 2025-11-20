@@ -232,25 +232,17 @@
         }
 
         .back-face {
-            background: #F7F4EF; 
-            background-image: linear-gradient(135deg, #F7F4EF 0%, #ECE6DA 100%);
-            border: 1px solid rgba(161, 136, 127, 0.15); 
-        }
-
-        /* --- 電腦版設定 (保持不變) --- */
-        .card-back-icon {
-            width: 65%;  
-            height: auto;
-            object-fit: contain;
-            opacity: 1; 
-            filter: drop-shadow(2px 4px 5px rgba(0,0,0,0.2)); 
-            /* 電腦版維持原本的微調 */
-            transform: translateZ(10px) translateY(5px); 
+            background: #EACDA3;
+            background-image: linear-gradient(135deg, #EACDA3 0%, #D6AE7B 100%);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: clamp(1.5em, 5vw, 2em);
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .card-face svg {
-            width: 65%;  
-            height: 65%;
+            width: 70%; 
+            height: 70%;
         }
 
         @media (max-width: 480px) {
@@ -260,15 +252,12 @@
             .card-face {
                 border-radius: 12px; 
             }
-            /* --- 手機版設定 (修改處) --- */
-            .card-back-icon {
-                width: 75%; 
-                /* 手機版取消 translateY(5px)，改為 0，讓它往上移回正中央 */
-                transform: translateZ(10px) translateY(0); 
-            }
             .card-face svg {
                 width: 75%; 
                 height: 75%;
+            }
+            .back-face {
+                font-size: clamp(2em, 7vw, 2.5em); 
             }
         }
         
@@ -291,13 +280,16 @@
         [data-card="tennis-ball"] .front-face { background-color: #C9D8C5; }
         [data-card="tennis-ball"] svg { fill: #97B53F; }
 
+        /* --- 【已修改】馬的圖示 --- */
         .hero-logo {
             position: absolute;
+            /* 靠在文字左側 */
             right: 100%; 
             top: 50%;
             transform: translateY(-50%);
             width: auto;
             height: 85px;      
+            /* --- 修改：負邊距加大至 -32px，讓馬非常緊靠文字 --- */
             margin-right: -32px; 
             opacity: 1;
             pointer-events: none;
@@ -307,6 +299,7 @@
         @media (max-width: 480px) {
             .hero-logo {
                 height: 75px;
+                /* 手機版也貼很近 */
                 margin-right: -28px; 
             }
         }
@@ -320,10 +313,13 @@
             z-index: 20; 
         }
 
+        /* --- 【已修改】按鈕樣式 --- */
         .btn {
-            background: #F7F4EF; 
-            color: #755C48;
+            background: #EACDA3;
+            color: white;
             border: none;
+            /* --- 修改：利用 padding-left 將文字往右推，以平衡左邊馬的視覺重量 --- */
+            /* 左邊 padding 給大一點 (60px)，右邊小一點 (20px)，這樣視覺上包含馬就會置中 */
             padding: 8px 20px 8px 60px; 
             font-size: 1.2em;
             font-weight: bold;
@@ -333,7 +329,6 @@
             width: 100%;
             letter-spacing: 2px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-shadow: 0 1px 3px rgba(0,0,0,0.25); 
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
             display: flex;
@@ -343,6 +338,7 @@
             line-height: 1.2;
         }
         
+        /* --- 文字包裹器 --- */
         .btn-content {
             position: relative;
             display: inline-block;
@@ -351,6 +347,7 @@
         @media (max-width: 480px) {
             .btn {
                 font-size: 1.1em;
+                /* 手機版 padding 調整 */
                 padding: 8px 15px 8px 50px; 
             }
         }
@@ -403,6 +400,7 @@
             .modal-button:hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); }
         }
 
+        /* --- DESKTOP OPTIMIZATION START --- */
         @media (min-width: 768px) {
             .main-wrapper { max-width: 650px; gap: 0; } 
             .game-container { padding: 40px; border-radius: 25px; margin-bottom: 35px; }
@@ -414,9 +412,10 @@
             .instructions { font-size: 1.2em; margin-bottom: 40px; }
             .memory-game { max-width: 500px; gap: 16px; }
             .card-face { border-radius: 20px; }
-            .btn { padding: 15px 40px 15px 80px; font-size: 1.3em; } 
+            .btn { padding: 15px 40px 15px 80px; font-size: 1.3em; } /* 桌面版對齊調整 */
             .hero-logo { height: 90px; margin-right: -35px; } 
         }
+        /* --- DESKTOP OPTIMIZATION END --- */
 
     </style>
 </head>
@@ -485,7 +484,7 @@
             { name: 'moon-pink', svgId: 'icon-moon' }
         ];
 
-        let gameCards = [...baseCards, ...baseCards]; 
+        let gameCards = [...baseCards, ...baseCards]; // Creates pairs
 
         let selectedCards = [];
         let lockBoard = false;
@@ -523,7 +522,7 @@
                         <svg><use xlink:href="#${item.svgId}"></use></svg>
                     </div>
                     <div class="card-face back-face">
-                        <img src="stepogo.png" class="card-back-icon" alt="Step Logo">
+                        ${index + 1}
                     </div>
                 `;
                 
