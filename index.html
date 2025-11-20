@@ -237,19 +237,19 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        /* --- 修改：stepogo 圖片樣式 (已縮小) --- */
+        /* --- 修改：放大卡背圖片 --- */
         .card-back-icon {
-            width: 55%;  /* 從 75% 改為 55%，讓卡背更清爽 */
+            width: 80%;  /* 放大至 80%，填滿大部分空間 */
             height: auto;
             object-fit: contain;
             opacity: 0.9; 
             filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); 
         }
 
-        /* --- 修改：正面圖示 (SVG) 也縮小 --- */
+        /* --- 修改：放大正面圖示 (SVG) --- */
         .card-face svg {
-            width: 55%; /* 從 70% 改為 55% */
-            height: 55%;
+            width: 80%;  /* 放大至 80% */
+            height: 80%;
         }
 
         @media (max-width: 480px) {
@@ -259,9 +259,10 @@
             .card-face {
                 border-radius: 12px; 
             }
+            /* 手機版保持 80%，因為卡片變長方形，這樣寬度剛好 */
             .card-face svg {
-                width: 60%; /* 手機版從 75% 改為 60% */
-                height: 60%;
+                width: 80%; 
+                height: 80%;
             }
         }
         
