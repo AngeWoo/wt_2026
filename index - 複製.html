@@ -17,7 +17,6 @@
         }
         
         :root {
-            /* 彈出視窗的色系 */
             --modal-bg: #F8F4F0;
             --modal-content-bg: #FBF9F6;
             --modal-accent: #C8A987;
@@ -30,7 +29,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* 全局防止縮放 */
             -webkit-user-select: none;
             user-select: none;
             -webkit-touch-callout: none;
@@ -51,7 +49,6 @@
             position: relative;
         }
         
-        /* 手機版優化 */
         @media (max-width: 480px) {
             body {
                 padding: 0;
@@ -90,7 +87,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 25px; 
+            gap: 0; 
             width: 100%;
             max-width: 450px;
             min-height: 100vh;
@@ -103,9 +100,9 @@
         
         @media (max-width: 480px) {
             .main-wrapper {
-                gap: 20px;
+                gap: 0;
                 padding: 16px 12px;
-                justify-content: space-between; /* 保持上下貼齊 */
+                justify-content: center; 
             }
         }
         
@@ -119,12 +116,14 @@
             box-sizing: border-box;
             touch-action: manipulation;
             margin: 0;
+            margin-bottom: 25px; 
         }
         
         @media (max-width: 480px) {
             .game-container {
                 padding: 20px;
                 border-radius: 15px;
+                margin-bottom: 20px;
             }
         }
 
@@ -159,9 +158,9 @@
 
         @media (max-width: 480px) {
             h1 {
-                font-size: clamp(2.4em, 9vw, 2.6em); /* 加大字體 */
-                margin-bottom: 30px; /* 增加標題下方間距 */
-                font-weight: 400; /* 取消粗體 */
+                font-size: clamp(2.4em, 9vw, 2.6em); 
+                margin-bottom: 30px; 
+                font-weight: 400; 
             }
             h1 .title-icon {
                 width: 45px;
@@ -195,10 +194,9 @@
             max-width: 360px;
             margin: 0 auto;
             touch-action: manipulation;
-            perspective: 1000px; /* For 3D flip effect */
+            perspective: 1000px; 
         }
         
-        /* 加大手機版卡牌間距 */
         @media (max-width: 480px) { .memory-game { gap: 15px; } } 
         @media (max-width: 360px) { .memory-game { gap: 10px; } }
 
@@ -247,23 +245,21 @@
             height: 70%;
         }
 
-        /* --- 手機版卡片長方形調整 --- */
         @media (max-width: 480px) {
             .memory-card {
-                aspect-ratio: 3 / 4; /* 將卡片寬高比改為 3:4 (寬:高) */
+                aspect-ratio: 3 / 4; 
             }
             .card-face {
-                border-radius: 12px; /* 配合長方形，微調圓角 */
+                border-radius: 12px; 
             }
             .card-face svg {
-                width: 75%; /* 調整圖示大小以適應 new-symbol */
+                width: 75%; 
                 height: 75%;
             }
             .back-face {
-                font-size: clamp(2em, 7vw, 2.5em); /* 讓數字也大一點 */
+                font-size: clamp(2em, 7vw, 2.5em); 
             }
         }
-        /* --- 手機版卡片長方形調整 END --- */
         
         [data-card="moon-pink"] .front-face,
         [data-card="moon-pink-2"] .front-face { background-color: #F8DCDA; }
@@ -284,34 +280,50 @@
         [data-card="tennis-ball"] .front-face { background-color: #C9D8C5; }
         [data-card="tennis-ball"] svg { fill: #97B53F; }
 
-        /* 【已修改】LOGO 樣式 (懸浮在上層，再次調整垂直位置) */
+        /* --- 【已修改】馬的圖示 --- */
         .hero-logo {
-            position: fixed; /* 懸浮 */
-            z-index: 99; /* 顯示在遊戲容器(10)之上，彈出視窗(1000)之下 */
-            width: 60%;
-            max-width: 220px; /* 縮小尺寸 */
-            height: auto;
-            left: 50%;
-            top: 85%; /* 【已修改】調整垂直位置到 85% 處 (原為 75%) */
-            transform: translate(-50%, -50%); /* 垂直水平置中於 (50%, 85%) 點 */
-            pointer-events: none; /* 點擊穿透 */
-            opacity: 0.7; /* 透明度 */
+            position: absolute;
+            /* 靠在文字左側 */
+            right: 100%; 
+            top: 50%;
+            transform: translateY(-50%);
+            width: auto;
+            height: 85px;      
+            /* --- 修改：負邊距加大至 -32px，讓馬非常緊靠文字 --- */
+            margin-right: -32px; 
+            opacity: 1;
+            pointer-events: none;
+            z-index: 5;
         }
         
+        @media (max-width: 480px) {
+            .hero-logo {
+                height: 75px;
+                /* 手機版也貼很近 */
+                margin-right: -28px; 
+            }
+        }
+
         .controls {
             width: 100%;
             display: flex;
             justify-content: center;
+            margin-top: 0; 
+            position: relative;
+            z-index: 20; 
         }
 
+        /* --- 【已修改】按鈕樣式 --- */
         .btn {
             background: #EACDA3;
             color: white;
             border: none;
-            padding: 16px 30px;
+            /* --- 修改：利用 padding-left 將文字往右推，以平衡左邊馬的視覺重量 --- */
+            /* 左邊 padding 給大一點 (60px)，右邊小一點 (20px)，這樣視覺上包含馬就會置中 */
+            padding: 8px 20px 8px 60px; 
             font-size: 1.2em;
             font-weight: bold;
-            border-radius: 50px;
+            border-radius: 60px; 
             cursor: pointer;
             transition: box-shadow 0.3s ease;
             width: 100%;
@@ -319,12 +331,24 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: auto;
+            line-height: 1.2;
+        }
+        
+        /* --- 文字包裹器 --- */
+        .btn-content {
+            position: relative;
+            display: inline-block;
         }
         
         @media (max-width: 480px) {
             .btn {
                 font-size: 1.1em;
-                padding: 14px 25px;
+                /* 手機版 padding 調整 */
+                padding: 8px 15px 8px 50px; 
             }
         }
         @media (hover: hover) and (pointer: fine) {
@@ -378,8 +402,8 @@
 
         /* --- DESKTOP OPTIMIZATION START --- */
         @media (min-width: 768px) {
-            .main-wrapper { max-width: 650px; gap: 35px; }
-            .game-container { padding: 40px; border-radius: 25px; }
+            .main-wrapper { max-width: 650px; gap: 0; } 
+            .game-container { padding: 40px; border-radius: 25px; margin-bottom: 35px; }
             h1 { font-size: 3.2em; margin-bottom: 20px; }
             h1 .title-icon {
                 width: 65px;
@@ -388,7 +412,8 @@
             .instructions { font-size: 1.2em; margin-bottom: 40px; }
             .memory-game { max-width: 500px; gap: 16px; }
             .card-face { border-radius: 20px; }
-            .btn { padding: 20px 40px; font-size: 1.3em; }
+            .btn { padding: 15px 40px 15px 80px; font-size: 1.3em; } /* 桌面版對齊調整 */
+            .hero-logo { height: 90px; margin-right: -35px; } 
         }
         /* --- DESKTOP OPTIMIZATION END --- */
 
@@ -408,21 +433,24 @@
         </defs>
     </svg>
 
-    <img src="hero-logo.png" alt="集修行" class="hero-logo">
-
     <div class="main-wrapper">
         <div class="game-container">
             <h1>
-                <img src="2.png" alt="icon" class="title-icon">
+                <img src="brown_bear.png" alt="熊大圖示" class="title-icon">
                 點點心連心
-                <img src="2.png" alt="icon" class="title-icon">
+                <img src="cony_rabbit.png" alt="兔兔圖示" class="title-icon">
             </h1>
             <p class="instructions">翻出兩張相同圖，啟動一如心連心。</p>
             <div class="memory-game" id="gameBoard"></div>
         </div>
 
         <div class="controls">
-            <button class="btn" onclick="location.reload()">立馬前行GOGOGO</button>
+            <button class="btn" onclick="location.reload()">
+                <span class="btn-content">
+                    <img src="hero-logo.gif" alt="集修行" class="hero-logo">
+                    立馬前行GOGOGO
+                </span>
+            </button>
         </div>
     </div>
 
