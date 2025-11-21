@@ -17,20 +17,12 @@
         }
         
         :root {
-            --bg-gradient-start: #FFF0E3;
-            --bg-gradient-end: #F5D4B8;
-            --container-bg: #FFFBF2;
-            --container-shadow: rgba(255, 230, 200, 0.6);
-            --text-primary: #8D7668;
-            --text-secondary: #B09E92;
-            --btn-bg: #CFF0EF;
-            --btn-text: #7A7A7A;
-            --modal-bg: #FFFBF2;
-            --modal-content-bg: #FFFFFF;
-            --modal-accent: #CFF0EF;
-            --modal-title-text: #8D7668;
-            --modal-text: #7A7A7A;
-            --modal-border: #F0E6D8;
+            --modal-bg: #F8F4F0;
+            --modal-content-bg: #FBF9F6;
+            --modal-accent: #C8A987;
+            --modal-title-text: #8D6E63;
+            --modal-text: #5c5248;
+            --modal-border: #EAE2D9;
         }
 
         * {
@@ -43,7 +35,7 @@
         }
 
         body {
-            background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            background-color: #F4F0E9;
             font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
             min-height: 100vh;
             width: 100%;
@@ -77,18 +69,17 @@
 
         .snowflake {
             position: absolute;
-            background: rgba(255, 255, 255, 0.9); /* 提高不透明度，讓雪更明顯 */
+            background: rgba(117, 92, 72, 0.15);
             border-radius: 50%;
             animation: snowfall linear infinite;
             opacity: 0;
-            box-shadow: 0 0 8px rgba(255,255,255,0.6); /* 增加光暈 */
         }
 
         @keyframes snowfall {
-            0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+            0% { transform: translateY(-5vh) translateX(0); opacity: 0; }
             10% { opacity: 1; }
             90% { opacity: 1; }
-            100% { transform: translateY(110vh) translateX(20px); opacity: 0; }
+            100% { transform: translateY(105vh) translateX(-30px); opacity: 0; }
         }
 
         .main-wrapper {
@@ -116,11 +107,10 @@
         }
         
         .game-container {
-            background: var(--container-bg); 
-            border-radius: 25px;
+            background: #FAF7F2; 
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 0 25px var(--container-shadow), inset 0 0 20px rgba(255,255,255,0.8);
-            border: 2px solid rgba(255,255,255,0.6);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             text-align: center;
             width: 100%;
             box-sizing: border-box;
@@ -132,19 +122,24 @@
         @media (max-width: 480px) {
             .game-container {
                 padding: 20px;
-                border-radius: 20px;
+                border-radius: 15px;
                 margin-bottom: 20px;
             }
         }
 
         h1 {
-            color: var(--text-primary); 
+            color: #755C48; 
             margin: 0 0 15px 0;
             font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
             font-size: clamp(2.4em, 8vw, 2.8em);
+            /* --- 修改：取消粗體，改為 normal (400) --- */
             font-weight: normal;
             letter-spacing: 0.05em;
-            text-shadow: none;
+            text-shadow: 
+                1px 1px 0px rgba(90, 70, 60, 0.6),
+                2px 2px 0px rgba(90, 70, 60, 0.6),
+                3px 3px 0px rgba(90, 70, 60, 0.6),
+                4px 4px 8px rgba(0, 0, 0, 0.2);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -152,12 +147,11 @@
             line-height: 1;
         }
         
-        /* --- 修改：圖示尺寸變大 --- */
         h1 .title-icon {
-            width: 80px;  /* 電腦版加大 */
-            height: 80px;
+            width: 55px;
+            height: 55px;
             margin: 0 10px;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
             display: inline-block;
             position: relative;
             top: 2px;
@@ -167,12 +161,12 @@
             h1 {
                 font-size: clamp(2.4em, 9vw, 2.6em); 
                 margin-bottom: 30px; 
+                /* --- 修改：手機版也取消粗體 --- */
                 font-weight: normal; 
             }
-            /* --- 修改：手機版圖示尺寸變大 --- */
             h1 .title-icon {
-                width: 65px;  /* 手機版加大 */
-                height: 65px;
+                width: 45px;
+                height: 45px;
                 display: inline-block;
                 position: relative;
                 top: 2px;
@@ -180,7 +174,7 @@
         }
         
         .instructions {
-            color: var(--text-secondary);
+            color: #A1887F;
             font-size: 1.1em;
             margin-bottom: 30px;
             text-align: center;
@@ -233,17 +227,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(180, 160, 150, 0.15);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
 
         .front-face {
             transform: rotateY(180deg);
-            filter: brightness(1.02);
         }
 
         .back-face {
-            background: #FFFFFF; 
-            border: none; 
+            background: #F7F4EF; 
+            background-image: linear-gradient(135deg, #F7F4EF 0%, #ECE6DA 100%);
+            border: 1px solid rgba(161, 136, 127, 0.15); 
         }
 
         .card-back-icon {
@@ -326,25 +320,25 @@
         }
 
         .btn {
-            background: var(--btn-bg); 
-            color: var(--btn-text);
+            background: #F7F4EF; 
+            color: #755C48;
             border: none;
-            padding: 10px 20px 10px 60px;
+            padding: 8px 20px 8px 60px; 
             font-size: 1.2em;
             font-weight: bold;
             border-radius: 60px; 
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: box-shadow 0.3s ease;
             width: 100%;
             letter-spacing: 2px;
-            box-shadow: 0 5px 15px rgba(200, 240, 240, 0.5), inset 0 2px 5px rgba(255,255,255,0.8);
-            text-shadow: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.25); 
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 50px;
+            min-height: auto;
             line-height: 1.2;
         }
         
@@ -356,19 +350,18 @@
         @media (max-width: 480px) {
             .btn {
                 font-size: 1.1em;
-                padding: 10px 15px 10px 50px; 
+                padding: 8px 15px 8px 50px; 
             }
         }
         @media (hover: hover) and (pointer: fine) {
             .btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(180, 230, 230, 0.6);
+                box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             }
         }
         
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(80, 60, 50, 0.4); backdrop-filter: blur(4px);
+            background: rgba(80, 70, 60, 0.6); backdrop-filter: blur(5px);
             z-index: 1000; justify-content: center; align-items: center;
             opacity: 0; transition: opacity 0.3s ease; padding: 20px;
             touch-action: manipulation;
@@ -382,7 +375,6 @@
             touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
         .modal.show .modal-content { transform: scale(1); }
-        
         .modal-icon {
             width: 120px; height: 120px; margin: -20px auto 20px;
             background-color: var(--modal-accent);
@@ -401,24 +393,22 @@
         }
 
         .modal-button {
-            background: var(--modal-accent); 
-            color: #666; 
-            border: none; padding: 16px 50px;
+            background: var(--modal-accent); color: white; border: none; padding: 16px 50px;
             font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%; max-width: 300px;
-            display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: box-shadow 0.3s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
         @media (hover: hover) and (pointer: fine) {
-            .modal-button:hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); }
+            .modal-button:hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); }
         }
 
         @media (min-width: 768px) {
             .main-wrapper { max-width: 650px; gap: 0; } 
-            .game-container { padding: 40px; border-radius: 30px; margin-bottom: 35px; }
+            .game-container { padding: 40px; border-radius: 25px; margin-bottom: 35px; }
             h1 { font-size: 3.2em; margin-bottom: 20px; }
             h1 .title-icon {
-                width: 90px; /* 電腦版對應放大 */
-                height: 90px;
+                width: 65px;
+                height: 65px;
             }
             .instructions { font-size: 1.2em; margin-bottom: 40px; }
             .memory-game { max-width: 500px; gap: 16px; }
@@ -467,7 +457,7 @@
     <div class="modal" id="guidanceModal">
         <div class="modal-content">
             <div class="modal-icon"></div>
-            <div class="modal-header"><h3 id="modalTitle"></h3></div>
+            <div classs="modal-header"><h3 id="modalTitle"></h3></div>
             <div class="modal-message-container" id="guidanceMessage"></div>
             <button class="modal-button" id="closeModalBtn">立馬前行GoGoGo</button>
         </div>
@@ -606,25 +596,14 @@
         function createSnowflakes() {
             const container = document.getElementById('snow-container');
             if (!container) return;
-            const snowflakeCount = 150; // 增加數量到 150，製造大雪感
+            const snowflakeCount = 100;
             let snowflakesHTML = '';
             for (let i = 0; i < snowflakeCount; i++) {
-                const size = Math.random() * 12 + 8; // 尺寸變大：8px ~ 20px
+                const size = Math.random() * 4 + 2;
                 const left = Math.random() * 100;
-                const duration = Math.random() * 10 + 5; // 速度稍快
-                const delay = Math.random() * 10;
-                const opacity = Math.random() * 0.5 + 0.4; // 透明度變化
-                const blur = Math.random() < 0.5 ? 0 : 2; // 部分雪花模糊，增加景深感
-                
-                snowflakesHTML += `<div class="snowflake" style="
-                    width:${size}px; 
-                    height:${size}px; 
-                    left:${left}%; 
-                    animation-duration:${duration}s; 
-                    animation-delay:${delay}s;
-                    opacity:${opacity};
-                    filter: blur(${blur}px);
-                "></div>`;
+                const duration = Math.random() * 10 + 10;
+                const delay = Math.random() * 15;
+                snowflakesHTML += `<div class="snowflake" style="width:${size}px; height:${size}px; left:${left}%; animation-duration:${duration}s; animation-delay:${delay}s;"></div>`;
             }
             container.innerHTML = snowflakesHTML;
         }
