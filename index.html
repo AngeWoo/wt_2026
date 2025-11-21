@@ -18,19 +18,29 @@
         }
         
         :root {
-            --bg-gradient-start: #FFF0E3;
-            --bg-gradient-end: #F5D4B8;
-            --container-bg: #FFFBF2;
-            --container-shadow: rgba(255, 230, 200, 0.6);
-            --text-primary: #8D7668;
-            --text-secondary: #B09E92;
-            --btn-bg: #CFF0EF;
-            --btn-text: #7A7A7A;
-            --modal-bg: #FFFBF2;
+            /* --- 修正：背景維持暖色漸層 --- */
+            --bg-gradient-start: #FFF8F0;
+            --bg-gradient-end: #FAD6BB;
+            
+            /* --- 修正：卡片區背景調深 --- */
+            /* 原本是 #FFFDF9 (太白)，現在改為 #FFF6E6 (暖奶油色)，讓白色邊框更明顯 */
+            --container-bg: #FFF6E6;      
+            
+            --container-border: #FFFFFF;
+            --container-shadow: rgba(245, 200, 180, 0.5);
+            
+            --text-primary: #8B7061;
+            --text-secondary: #BCAAA4;
+            
+            --btn-bg: #C8F0EE;
+            --btn-text: #707070;
+            
+            /* Modal 同步加深 */
+            --modal-bg: #FFF6E6;
             --modal-content-bg: #FFFFFF;
-            --modal-accent: #CFF0EF;
-            --modal-title-text: #8D7668;
-            --modal-text: #7A7A7A;
+            --modal-accent: #C8F0EE;
+            --modal-title-text: #8B7061;
+            --modal-text: #707070;
             --modal-border: #F0E6D8;
         }
 
@@ -79,14 +89,12 @@
 
         .snowflake {
             position: absolute;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
             animation: snowfall linear infinite;
             opacity: 0;
-            /* 移除模糊，保留一點點光暈增加質感，若要完全銳利可移除 box-shadow */
-            box-shadow: 0 0 4px rgba(255,255,255,0.4);
+            box-shadow: 0 0 2px rgba(255,255,255,0.3);
             will-change: transform;
-            /* 強制移除任何濾鏡 */
             filter: none !important; 
         }
 
@@ -125,8 +133,8 @@
             background: var(--container-bg); 
             border-radius: 25px;
             padding: 30px;
-            box-shadow: 0 0 25px var(--container-shadow), inset 0 0 20px rgba(255,255,255,0.8);
-            border: 2px solid rgba(255,255,255,0.6);
+            border: 4px solid var(--container-border);
+            box-shadow: 0 0 30px var(--container-shadow);
             text-align: center;
             width: 100%;
             box-sizing: border-box;
@@ -140,12 +148,12 @@
                 padding: 20px;
                 border-radius: 20px;
                 margin-bottom: 10px; 
+                border-width: 3px; 
             }
         }
 
         h1 {
             color: var(--text-primary); 
-            /* --- 修改：標題下方間距縮小 --- */
             margin: 0 0 5px 0; 
             font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
             font-size: clamp(2.4em, 8vw, 2.8em);
@@ -161,7 +169,7 @@
         
         h1 .title-icon {
             margin: 0 8px;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+            filter: drop-shadow(2px 2px 3px rgba(139, 112, 97, 0.15));
             display: inline-block;
             position: relative;
         }
@@ -182,7 +190,6 @@
         @media (max-width: 480px) {
             h1 {
                 font-size: clamp(2.4em, 9vw, 2.6em); 
-                /* --- 修改：手機版標題下方間距縮小 --- */
                 margin-bottom: 5px; 
                 font-weight: normal; 
             }
@@ -203,16 +210,14 @@
         .instructions {
             color: var(--text-secondary);
             font-size: 1.1em;
-            /* --- 修改：說明文字下方間距縮小 --- */
             margin-bottom: 15px;
             text-align: center;
-            line-height: 1.4; /* 行高稍微縮小一點 */
+            line-height: 1.4;
         }
         
         @media (max-width: 480px) {
             .instructions {
                 font-size: 1em;
-                /* --- 修改：手機版說明文字下方間距縮小 --- */
                 margin-bottom: 15px;
             }
         }
@@ -256,7 +261,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(180, 160, 150, 0.15);
+            box-shadow: 0 4px 10px rgba(180, 140, 120, 0.1);
             transform: translate3d(0,0,0);
         }
 
@@ -361,7 +366,7 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             width: 100%;
             letter-spacing: 2px;
-            box-shadow: 0 5px 15px rgba(200, 240, 240, 0.5), inset 0 2px 5px rgba(255,255,255,0.8);
+            box-shadow: 0 5px 15px rgba(200, 240, 238, 0.8), inset 0 2px 5px rgba(255,255,255,0.9);
             text-shadow: none;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
@@ -404,6 +409,7 @@
             transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             position: relative; text-align: center;
             touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+            border: 3px solid #fff;
         }
         .modal.show .modal-content { transform: scale(1); }
         
@@ -438,9 +444,8 @@
 
         @media (min-width: 768px) {
             .main-wrapper { max-width: 650px; gap: 0; } 
-            /* --- 修改：電腦版底部間距 --- */
             .game-container { padding: 40px; border-radius: 30px; margin-bottom: 15px; }
-            h1 { font-size: 3.2em; margin-bottom: 10px; } /* 電腦版也稍微縮小 */
+            h1 { font-size: 3.2em; margin-bottom: 10px; } 
             h1 .icon-left {
                 width: 75px;
                 height: 75px;
@@ -449,7 +454,7 @@
                 width: 75px;
                 height: 75px;
             }
-            .instructions { font-size: 1.2em; margin-bottom: 20px; } /* 電腦版縮小 */
+            .instructions { font-size: 1.2em; margin-bottom: 20px; }
             .memory-game { max-width: 500px; gap: 16px; }
             .card-face { border-radius: 20px; }
             .btn { padding: 15px 40px 15px 80px; font-size: 1.3em; } 
