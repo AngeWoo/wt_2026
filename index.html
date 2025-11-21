@@ -14,6 +14,7 @@
             width: 100%;
             height: 100%;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
         
         :root {
@@ -73,6 +74,7 @@
             z-index: 1;
             margin: 0;
             padding: 0;
+            transform: translate3d(0,0,0);
         }
 
         .snowflake {
@@ -81,7 +83,11 @@
             border-radius: 50%;
             animation: snowfall linear infinite;
             opacity: 0;
-            box-shadow: 0 0 8px rgba(255,255,255,0.6);
+            /* 移除模糊，保留一點點光暈增加質感，若要完全銳利可移除 box-shadow */
+            box-shadow: 0 0 4px rgba(255,255,255,0.4);
+            will-change: transform;
+            /* 強制移除任何濾鏡 */
+            filter: none !important; 
         }
 
         @keyframes snowfall {
@@ -126,20 +132,21 @@
             box-sizing: border-box;
             touch-action: manipulation;
             margin: 0;
-            margin-bottom: 25px; 
+            margin-bottom: 10px; 
         }
         
         @media (max-width: 480px) {
             .game-container {
                 padding: 20px;
                 border-radius: 20px;
-                margin-bottom: 20px;
+                margin-bottom: 10px; 
             }
         }
 
         h1 {
             color: var(--text-primary); 
-            margin: 0 0 15px 0;
+            /* --- 修改：標題下方間距縮小 --- */
+            margin: 0 0 5px 0; 
             font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
             font-size: clamp(2.4em, 8vw, 2.8em);
             font-weight: normal;
@@ -157,42 +164,38 @@
             filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
             display: inline-block;
             position: relative;
-            /* 移除統一的寬高，改由個別 class 控制 */
         }
         
-        /* --- 修改：左側圖示加大 --- */
         h1 .icon-left {
-            width: 110px;  /* 電腦版 */
-            height: 110px;
-            top: 5px;
+            width: 75px; 
+            height: 75px;
+            top: 2px;
         }
         
-        /* --- 修改：右側圖示縮小 --- */
         h1 .icon-right {
-            width: 55px;   /* 電腦版 */
-            height: 55px;
-            top: 0;
-            opacity: 0.8; /* 稍微淡一點，增加層次 */
+            width: 75px;
+            height: 75px;
+            top: 2px;
+            opacity: 0.9; 
         }
 
         @media (max-width: 480px) {
             h1 {
                 font-size: clamp(2.4em, 9vw, 2.6em); 
-                margin-bottom: 30px; 
+                /* --- 修改：手機版標題下方間距縮小 --- */
+                margin-bottom: 5px; 
                 font-weight: normal; 
             }
             
-            /* --- 修改：手機版左側圖示 --- */
             h1 .icon-left {
-                width: 85px;   /* 手機版加大 */
-                height: 85px;
+                width: 55px; 
+                height: 55px;
                 margin-right: 5px;
             }
             
-            /* --- 修改：手機版右側圖示 --- */
             h1 .icon-right {
-                width: 40px;   /* 手機版縮小 */
-                height: 40px;
+                width: 55px; 
+                height: 55px;
                 margin-left: 5px;
             }
         }
@@ -200,15 +203,17 @@
         .instructions {
             color: var(--text-secondary);
             font-size: 1.1em;
-            margin-bottom: 30px;
+            /* --- 修改：說明文字下方間距縮小 --- */
+            margin-bottom: 15px;
             text-align: center;
-            line-height: 1.6;
+            line-height: 1.4; /* 行高稍微縮小一點 */
         }
         
         @media (max-width: 480px) {
             .instructions {
                 font-size: 1em;
-                margin-bottom: 20px;
+                /* --- 修改：手機版說明文字下方間距縮小 --- */
+                margin-bottom: 15px;
             }
         }
 
@@ -232,7 +237,7 @@
             cursor: pointer;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s;
+            transition: transform 0.4s ease-out;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
         }
@@ -252,6 +257,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 10px rgba(180, 160, 150, 0.15);
+            transform: translate3d(0,0,0);
         }
 
         .front-face {
@@ -432,18 +438,18 @@
 
         @media (min-width: 768px) {
             .main-wrapper { max-width: 650px; gap: 0; } 
-            .game-container { padding: 40px; border-radius: 30px; margin-bottom: 35px; }
-            h1 { font-size: 3.2em; margin-bottom: 20px; }
-            /* --- 修改：電腦版圖示尺寸同步調整 --- */
+            /* --- 修改：電腦版底部間距 --- */
+            .game-container { padding: 40px; border-radius: 30px; margin-bottom: 15px; }
+            h1 { font-size: 3.2em; margin-bottom: 10px; } /* 電腦版也稍微縮小 */
             h1 .icon-left {
-                width: 110px;
-                height: 110px;
+                width: 75px;
+                height: 75px;
             }
             h1 .icon-right {
-                width: 60px;
-                height: 60px;
+                width: 75px;
+                height: 75px;
             }
-            .instructions { font-size: 1.2em; margin-bottom: 40px; }
+            .instructions { font-size: 1.2em; margin-bottom: 20px; } /* 電腦版縮小 */
             .memory-game { max-width: 500px; gap: 16px; }
             .card-face { border-radius: 20px; }
             .btn { padding: 15px 40px 15px 80px; font-size: 1.3em; } 
@@ -534,13 +540,11 @@
             }
         }
 
-        // 取得某個位置周圍的所有位置 (上下左右 + 對角線)
         function getSurroundingIndices(idx) {
             const row = Math.floor(idx / 4);
             const col = idx % 4;
             let forbidden = [];
             
-            // 檢查九宮格範圍
             for (let r = row - 1; r <= row + 1; r++) {
                 for (let c = col - 1; c <= col + 1; c++) {
                     if (r >= 0 && r < 4 && c >= 0 && c < 4) {
@@ -554,44 +558,33 @@
             return forbidden;
         }
 
-        // 新的分散洗牌邏輯
         function distributeCards(uniqueTypes) {
             let board = new Array(16).fill(null);
             let availableIndices = Array.from({ length: 16 }, (_, i) => i);
             
-            // 隨機打亂要放置的圖案順序
             let typesToPlace = [...uniqueTypes].sort(() => 0.5 - Math.random());
 
             typesToPlace.forEach(type => {
-                // 1. 隨機選擇第一張卡片的位置
                 if (availableIndices.length === 0) return;
                 
                 const rand1 = Math.floor(Math.random() * availableIndices.length);
                 const pos1 = availableIndices[rand1];
                 
-                // 放置第一張
                 board[pos1] = type;
                 availableIndices.splice(rand1, 1);
 
-                // 2. 尋找第二張卡片的位置 (儘量避開周圍)
                 const neighbors = getSurroundingIndices(pos1);
-                
-                // 篩選出不在周圍的可用位置
                 let candidates = availableIndices.filter(idx => !neighbors.includes(idx));
                 
-                // 如果沒有好位置 (空間太擁擠)，則退而求其次選擇任意可用位置
                 if (candidates.length === 0) {
                     candidates = availableIndices;
                 }
 
-                // 隨機選擇第二張的位置
                 const rand2 = Math.floor(Math.random() * candidates.length);
                 const pos2 = candidates[rand2];
 
-                // 放置第二張
                 board[pos2] = type;
                 
-                // 從可用列表中移除
                 const removeIdx = availableIndices.indexOf(pos2);
                 availableIndices.splice(removeIdx, 1);
             });
@@ -600,7 +593,6 @@
         }
 
         function createBoard() {
-            // 使用新的分散演算法生成盤面
             gameCards = distributeCards(baseCards);
             
             gameBoard.innerHTML = '';
@@ -621,7 +613,25 @@
                     </div>
                 `;
                 
-                card.addEventListener('click', () => handleCardClick(card));
+                let handled = false;
+
+                const triggerFlip = (e) => {
+                    if (e.type === 'click' && handled) {
+                        handled = false; 
+                        return;
+                    }
+                    
+                    if (e.type === 'touchend') {
+                        handled = true;
+                        setTimeout(() => { handled = false; }, 300);
+                    }
+
+                    handleCardClick(card);
+                };
+
+                card.addEventListener('touchend', triggerFlip, { passive: false });
+                card.addEventListener('click', triggerFlip);
+
                 gameBoard.appendChild(card);
             });
         }
@@ -691,7 +701,10 @@
         function createSnowflakes() {
             const container = document.getElementById('snow-container');
             if (!container) return;
-            const snowflakeCount = 150; 
+            
+            const isMobile = window.innerWidth < 480;
+            const snowflakeCount = isMobile ? 40 : 150; 
+            
             let snowflakesHTML = '';
             for (let i = 0; i < snowflakeCount; i++) {
                 const size = Math.random() * 12 + 8; 
@@ -699,7 +712,8 @@
                 const duration = Math.random() * 10 + 5;
                 const delay = Math.random() * 10;
                 const opacity = Math.random() * 0.5 + 0.4; 
-                const blur = Math.random() < 0.5 ? 0 : 2; 
+                
+                /* --- 修改：完全移除 blur 運算 --- */
                 
                 snowflakesHTML += `<div class="snowflake" style="
                     width:${size}px; 
@@ -708,7 +722,6 @@
                     animation-duration:${duration}s; 
                     animation-delay:${delay}s;
                     opacity:${opacity};
-                    filter: blur(${blur}px);
                 "></div>`;
             }
             container.innerHTML = snowflakesHTML;
@@ -718,14 +731,6 @@
             startNewGame();
             loadSheetData();
             createSnowflakes();
-            
-            document.addEventListener('touchend', (event) => {
-                const now = (new Date()).getTime();
-                if (now - (window.lastTouchEnd || 0) <= 300) {
-                    event.preventDefault();
-                }
-                window.lastTouchEnd = now;
-            }, { passive: false });
             
             document.addEventListener('gesturestart', (event) => event.preventDefault(), { passive: false });
             document.addEventListener('wheel', (event) => { if (event.ctrlKey) event.preventDefault(); }, { passive: false });
