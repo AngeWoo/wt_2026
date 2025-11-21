@@ -2,750 +2,1246 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <title>點點心連心</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
-    <style>
-        html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        :root {
-            /* --- 修正：背景維持暖色漸層 --- */
-            --bg-gradient-start: #FFF8F0;
-            --bg-gradient-end: #FAD6BB;
-            
-            /* --- 修正：卡片區背景調深 --- */
-            /* 原本是 #FFFDF9 (太白)，現在改為 #FFF6E6 (暖奶油色)，讓白色邊框更明顯 */
-            --container-bg: #FFF6E6;      
-            
-            --container-border: #FFFFFF;
-            --container-shadow: rgba(245, 200, 180, 0.5);
-            
-            --text-primary: #8B7061;
-            --text-secondary: #BCAAA4;
-            
-            --btn-bg: #C8F0EE;
-            --btn-text: #707070;
-            
-            /* Modal 同步加深 */
-            --modal-bg: #FFF6E6;
-            --modal-content-bg: #FFFFFF;
-            --modal-accent: #C8F0EE;
-            --modal-title-text: #8B7061;
-            --modal-text: #707070;
-            --modal-border: #F0E6D8;
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 寒修行專區</title>
+    
+    <meta name="description" content="聆聽真實的修行故事，感受生命在寒修行中的細微轉變，參與燈檠山互動遊戲，點亮心燈。">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="2026 寒修行專區：以真如之修行「步」向世界及未來">
+    <meta property="og:description" content="聆聽真實的修行故事，參與燈檠山互動遊戲，感受生命在寒修行中的細微轉變。">
+    <meta property="og:image" content="share-cover.jpg"> 
 
+    <style>
+        /* ========== 全域設定 ========== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-touch-callout: none;
+        }
+
+        :root {
+            --color-bg: #dae9f8;
+            --color-text-main: #22252b;
+            --color-text-sub: #61656f;
+            --color-primary: #8b7355;
+            --color-primary-dark: #6d5a43;
+            --color-accent: #00B900;
+            --radius-md: 10px;
+            --radius-lg: 18px;
+            --shadow-soft: 0 14px 40px rgba(15, 23, 42, 0.12);
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-            font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
-            min-height: 100vh;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            touch-action: manipulation;
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-            text-size-adjust: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+            line-height: 1.8;
+            color: var(--color-text-main);
+            background-color: var(--color-bg);
             position: relative;
+            overflow-x: hidden;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
         }
-        
-        @media (max-width: 480px) {
-            body {
-                padding: 0;
+
+        :focus-visible {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+
+        .page-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .container {
+            width: min(1120px, 100% - 40px);
+            margin: 0 auto;
+        }
+
+        /* ========== 背景動畫 (極光) ========== */
+        @keyframes aurora-flow {
+            0% { background-position: 0% 50%, 50% 100%, 100% 0%; }
+            50% { background-position: 100% 50%, 0% 0%, 50% 100%; }
+            100% { background-position: 0% 50%, 50% 100%, 100% 0%; }
+        }
+
+        /* 修改：大雪紛飛動畫 */
+        @keyframes snow-fall {
+            to {
+                /* 透過不同的位移距離創造視差 (大顆動比較快) */
+                background-position: 
+                    0 600px,      /* 大雪花位移 */
+                    50px 400px,   /* 中雪花位移 */
+                    100px 300px;  /* 小雪花位移 */
             }
         }
 
-        .snow-container {
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:
+                radial-gradient(45vmax circle at 0% 40%, rgba(13, 227, 255, 0.27), transparent 68%),
+                radial-gradient(40vmax circle at 60% 100%, rgba(255, 100, 227, 0.22), transparent 70%),
+                radial-gradient(40vmax circle at 100% 0%, rgba(179, 136, 255, 0.25), transparent 65%);
+            background-size: 100% 100%;
+            will-change: background-position;
+            animation: aurora-flow 26s ease-in-out infinite alternate;
+        }
+
+        /* 修改：雪花樣式 (變大、變密) */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image:
+                /* Layer 1: 大雪花 (7px) */
+                radial-gradient(circle, rgba(255,255,255,0.95) 7px, transparent 8px),
+                /* Layer 2: 中雪花 (5px) */
+                radial-gradient(circle, rgba(255,255,255,0.8) 5px, transparent 6px),
+                /* Layer 3: 小雪花 (3px) */
+                radial-gradient(circle, rgba(255,255,255,0.6) 3px, transparent 4px);
+            
+            /* 調整分佈密度 */
+            background-size:
+                350px 350px,
+                200px 200px,
+                150px 150px;
+            
+            /* 初始位置 */
+            background-position:
+                0 0,
+                50px 50px,
+                100px 20px;
+            
+            opacity: 0.8; /* 提高清晰度 */
+            will-change: background-position;
+            animation: snow-fall 15s linear infinite; /* 加快速度 */
+            pointer-events: none;
+        }
+
+        /* ========== 頂部導覽列 ========== */
+        .site-nav {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            margin: 0;
-            padding: 0;
-            transform: translate3d(0,0,0);
+            right: 0;
+            z-index: 20;
+            backdrop-filter: blur(16px);
+            background: radial-gradient(circle at top, rgba(15,23,42,0.7), rgba(15,23,42,0.82));
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
 
-        .snowflake {
+        .nav-inner {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; 
+            color: #f9fafb;
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            text-shadow: 
+                1px 1px 0 #64748b,
+                2px 2px 0 #475569,
+                3px 3px 0 #334155,
+                4px 4px 8px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-brand:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            font-size: 14px;
+        }
+
+        .nav-links a {
+            color: #e5e7eb;
+            text-decoration: none;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
             position: absolute;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            animation: snowfall linear infinite;
-            opacity: 0;
-            box-shadow: 0 0 2px rgba(255,255,255,0.3);
-            will-change: transform;
-            filter: none !important; 
+            left: 0;
+            bottom: -4px;
+            width: 0;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #fcd34d, #f97316);
+            transition: width 0.25s ease;
         }
 
-        @keyframes snowfall {
-            0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(110vh) translateX(20px); opacity: 0; }
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
-        .main-wrapper {
+        .nav-cta {
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: none;
+            background: transparent;
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .nav-toggle {
+            display: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            border: 1px solid rgba(248,250,252,0.5);
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            background: transparent;
+            color: #fff;
+        }
+
+        /* ========== Hero 區塊 ========== */
+        .hero-header {
+            position: relative;
+            margin-top: 64px;
+            min-height: 70vh;
+            background:
+                linear-gradient(120deg, rgba(15,23,42,0.82), rgba(15,23,42,0.55)),
+                url('苑史-4.jpg') center center / cover no-repeat;
+            color: #f9fafb;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top, rgba(148,163,184,0.2), transparent 60%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 72px 0 80px;
+        }
+
+        .hero-layout {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-title {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .hero-badge {
+            position: absolute;
+            top: 26%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-badge img {
+            width: 260px;
+            height: auto;
+            display: block;
+            background: transparent;
+            mix-blend-mode: screen;
+            opacity: 0.95;
+            filter: drop-shadow(0 6px 14px rgba(15,23,42,0.6));
+        }
+
+        .hero-logo-panel {
+            display: flex;
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center;
+            padding: 120px 0 12px;
+            width: 100%;
+        }
+
+        .hero-logo-main {
+            max-width: 520px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-logo-main img {
+            width: 100%;
+            max-width: 520px;
+            height: auto;
+            display: block;
+            filter: brightness(0) invert(1);
+            mix-blend-mode: screen;
+            opacity: 0.95;
+        }
+
+        .hero-subtitle {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: center;
+            letter-spacing: 0.1em;
+            text-shadow: 
+                1px 1px 0 #475569,
+                2px 2px 0 #334155,
+                3px 3px 6px rgba(0,0,0,0.6);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ========== 區塊通用 ========== */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-eyebrow {
+            font-size: 13px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 30px;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .section-description {
+            font-size: 16px;
+            color: var(--color-text-sub);
+            max-width: 620px;
+            margin: 0 auto;
+            line-height: 1.9;
+        }
+
+        /* ========== 小小炭火體驗談 ========== */
+        .experience-section {
+            background: transparent;
+        }
+
+        .experience-grid {
+            margin-top: 32px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 28px;
+        }
+
+        .experience-item {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(6px);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, translate 0.25s ease;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0; 
-            width: 100%;
-            max-width: 450px;
-            min-height: 100vh;
-            position: relative;
-            z-index: 10;
-            margin: 0 auto;
-            padding: 20px 16px;
-            box-sizing: border-box;
-        }
-        
-        @media (max-width: 480px) {
-            .main-wrapper {
-                gap: 0;
-                padding: 16px 12px;
-                justify-content: center; 
-            }
-        }
-        
-        .game-container {
-            background: var(--container-bg); 
-            border-radius: 25px;
-            padding: 30px;
-            border: 4px solid var(--container-border);
-            box-shadow: 0 0 30px var(--container-shadow);
-            text-align: center;
-            width: 100%;
-            box-sizing: border-box;
-            touch-action: manipulation;
-            margin: 0;
-            margin-bottom: 10px; 
-        }
-        
-        @media (max-width: 480px) {
-            .game-container {
-                padding: 20px;
-                border-radius: 20px;
-                margin-bottom: 10px; 
-                border-width: 3px; 
-            }
         }
 
-        h1 {
-            color: var(--text-primary); 
-            margin: 0 0 5px 0; 
-            font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
-            font-size: clamp(2.4em, 8vw, 2.8em);
-            font-weight: normal;
-            letter-spacing: 0.05em;
-            text-shadow: none;
+        .experience-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 46px rgba(15,23,42,0.18);
+        }
+
+        .experience-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .experience-content {
+            padding: 20px 20px 18px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            white-space: nowrap;
-            line-height: 1;
-        }
-        
-        h1 .title-icon {
-            margin: 0 8px;
-            filter: drop-shadow(2px 2px 3px rgba(139, 112, 97, 0.15));
-            display: inline-block;
-            position: relative;
-        }
-        
-        h1 .icon-left {
-            width: 75px; 
-            height: 75px;
-            top: 2px;
-        }
-        
-        h1 .icon-right {
-            width: 75px;
-            height: 75px;
-            top: 2px;
-            opacity: 0.9; 
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: clamp(2.4em, 9vw, 2.6em); 
-                margin-bottom: 5px; 
-                font-weight: normal; 
-            }
-            
-            h1 .icon-left {
-                width: 55px; 
-                height: 55px;
-                margin-right: 5px;
-            }
-            
-            h1 .icon-right {
-                width: 55px; 
-                height: 55px;
-                margin-left: 5px;
-            }
-        }
-        
-        .instructions {
-            color: var(--text-secondary);
-            font-size: 1.1em;
-            margin-bottom: 15px;
-            text-align: center;
-            line-height: 1.4;
-        }
-        
-        @media (max-width: 480px) {
-            .instructions {
-                font-size: 1em;
-                margin-bottom: 15px;
-            }
-        }
-
-        .memory-game {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr)); 
-            gap: 12px;
-            width: 100%;
-            max-width: 360px;
-            margin: 0 auto;
-            touch-action: manipulation;
-            perspective: 1000px; 
-        }
-        
-        @media (max-width: 480px) { .memory-game { gap: 15px; } } 
-        @media (max-width: 360px) { .memory-game { gap: 10px; } }
-
-        .memory-card {
-            width: 100%;
-            aspect-ratio: 1;
-            cursor: pointer;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.4s ease-out;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .memory-card.is-flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card-face {
-            position: absolute;
-            width: 100%;
+            flex-direction: column;
             height: 100%;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden; 
-            border-radius: 15px;
+        }
+
+        .experience-tag {
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin-bottom: 6px;
+        }
+
+        .experience-title {
+            font-size: 18px;
+            font-weight: 650;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+            color: #111827;
+        }
+
+        .experience-text {
+            font-size: 14px;
+            color: var(--color-text-sub);
+            line-height: 1.9;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .experience-actions {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(180, 140, 120, 0.1);
-            transform: translate3d(0,0,0);
-        }
-
-        .front-face {
-            transform: rotateY(180deg);
-            filter: brightness(1.02);
-        }
-
-        .back-face {
-            background: #FFFFFF; 
-            border: none; 
-        }
-
-        .card-back-icon {
-            width: 65%;  
-            height: auto;
-            object-fit: contain;
-            opacity: 1; 
-            filter: none; 
-            transform: translateZ(10px) translateY(5px); 
-        }
-
-        .card-face svg {
-            width: 65%;  
-            height: 65%;
-        }
-
-        @media (max-width: 480px) {
-            .memory-card {
-                aspect-ratio: 3 / 4; 
-            }
-            .card-face {
-                border-radius: 12px; 
-            }
-            .card-back-icon {
-                width: 75%; 
-                transform: translateY(0); 
-            }
-            .card-face svg {
-                width: 75%; 
-                height: 75%;
-            }
-        }
-        
-        [data-card="moon-pink"] .front-face,
-        [data-card="moon-pink-2"] .front-face { background-color: #F8DCDA; }
-        [data-card="moon-pink"] svg,
-        [data-card="moon-pink-2"] svg { fill: #F7D94C; }
-        
-        [data-card="star-green"] .front-face,
-        [data-card="star-green-2"] .front-face { background-color: #F9F3D0; }
-        [data-card="star-green"] svg,
-        [data-card="star-green-2"] svg { fill: #2C9D5D; }
-
-        [data-card="star-blue"] .front-face { background-color: #E3F2FD; }
-        [data-card="star-blue"] svg { fill: #42A5F5; }
-        [data-card="sun-red"] .front-face { background-color: #D9E2E0; }
-        [data-card="sun-red"] svg { fill: #E84A28; }
-        [data-card="heart-orange"] .front-face { background-color: #F8DCDA; }
-        [data-card="heart-orange"] svg { fill: #E67E22; }
-        [data-card="tennis-ball"] .front-face { background-color: #C9D8C5; }
-        [data-card="tennis-ball"] svg { fill: #97B53F; }
-
-        .hero-logo {
-            position: absolute;
-            right: 100%; 
-            top: 50%;
-            transform: translateY(-50%);
-            width: auto;
-            height: 85px;      
-            margin-right: -32px; 
-            opacity: 1;
-            pointer-events: none;
-            z-index: 5;
-        }
-        
-        @media (max-width: 480px) {
-            .hero-logo {
-                height: 75px;
-                margin-right: -28px; 
-            }
-        }
-
-        .controls {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-top: 0; 
-            position: relative;
-            z-index: 20; 
+            gap: 8px;
+            margin-top: auto;
         }
 
         .btn {
-            background: var(--btn-bg); 
-            color: var(--btn-text);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            font-weight: 550;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.22s ease;
+            border-radius: 999px;
             border: none;
-            padding: 10px 20px 10px 60px;
-            font-size: 1.2em;
-            font-weight: bold;
-            border-radius: 60px; 
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            width: 100%;
-            letter-spacing: 2px;
-            box-shadow: 0 5px 15px rgba(200, 240, 238, 0.8), inset 0 2px 5px rgba(255,255,255,0.9);
-            text-shadow: none;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
+            white-space: nowrap;
+        }
+
+        .btn-watch,
+        .btn-share {
+            flex: 1;
+            font-size: 13px;
+            padding: 9px 12px;
+        }
+
+        .btn-watch {
+            background: var(--color-primary);
+            color: #f9fafb;
+        }
+
+        .btn-watch:hover {
+            background: var(--color-primary-dark);
+            box-shadow: 0 10px 24px rgba(139,115,85,0.45);
+        }
+
+        .btn-share {
+            background: var(--color-accent);
+            color: #f9fafb;
+        }
+
+        .btn-share:hover {
+            background: #009900;
+            box-shadow: 0 10px 24px rgba(0,153,0,0.45);
+        }
+
+        .icon-svg {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            vertical-align: middle;
+        }
+
+        /* ========== 燈檠山互動遊戲 ========== */
+        .games-section {
+            background: transparent;
+        }
+
+        .games-container {
+            margin-top: 32px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 28px;
+        }
+
+        .game-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card {
+            position: relative;
+            flex: 1;
+            min-height: 320px;
+            width: 100%; 
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            background: radial-gradient(circle at top, #4b5563, #0f172a);
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 50px;
-            line-height: 1.2;
         }
-        
-        .btn-content {
+
+        .game-icon {
+            position: absolute;
+            inset: -40px;
+            font-size: 260px;
+            line-height: 1;
+            opacity: 0.25;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-icon-heart {
+            color: rgba(253, 242, 248, 0.9);
+        }
+
+        .game-icon-crystal {
+            color: rgba(243, 244, 246, 0.9);
+        }
+
+        .game-content {
             position: relative;
-            display: inline-block;
-        }
-        
-        @media (max-width: 480px) {
-            .btn {
-                font-size: 1.1em;
-                padding: 10px 15px 10px 50px; 
-            }
-        }
-        @media (hover: hover) and (pointer: fine) {
-            .btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(180, 230, 230, 0.6);
-            }
-        }
-        
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(80, 60, 50, 0.4); backdrop-filter: blur(4px);
-            z-index: 1000; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease; padding: 20px;
-            touch-action: manipulation;
-        }
-        .modal.show { display: flex; opacity: 1; }
-        .modal-content {
-            background: var(--modal-bg); border-radius: 25px; padding: 25px 30px 30px;
-            max-width: 480px; width: 100%; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            position: relative; text-align: center;
-            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-            border: 3px solid #fff;
-        }
-        .modal.show .modal-content { transform: scale(1); }
-        
-        .modal-icon {
-            width: 120px; height: 120px; margin: -20px auto 20px;
-            background-color: var(--modal-accent);
-            -webkit-mask-image: url(slogo.png); mask-image: url(slogo.png);
-            -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;
-        }
-        .modal-header h3 { font-size: 26px; color: var(--modal-title-text); font-weight: bold; margin-bottom: 25px; }
-        
-        .modal-message-container {
-            font-size: 20px; line-height: 1.8; color: var(--modal-text);
+            z-index: 1;
+            padding: 28px 26px;
             text-align: left;
-            margin-bottom: 30px; padding: 25px;
-            background: var(--modal-content-bg); border: 1px solid var(--modal-border);
-            border-radius: 15px;
+            width: 100%;
         }
 
-        .modal-button {
-            background: var(--modal-accent); 
-            color: #666; 
-            border: none; padding: 16px 50px;
-            font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%; max-width: 300px;
-            display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: box-shadow 0.3s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-        }
-        @media (hover: hover) and (pointer: fine) {
-            .modal-button:hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); }
+        .game-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #f9fafb;
+            margin-bottom: 10px;
         }
 
-        @media (min-width: 768px) {
-            .main-wrapper { max-width: 650px; gap: 0; } 
-            .game-container { padding: 40px; border-radius: 30px; margin-bottom: 15px; }
-            h1 { font-size: 3.2em; margin-bottom: 10px; } 
-            h1 .icon-left {
-                width: 75px;
-                height: 75px;
+        .game-subtitle {
+            font-size: 13px;
+            color: rgba(209,213,219,0.9);
+            margin-bottom: 14px;
+        }
+
+        .game-description {
+            font-size: 14px;
+            color: rgba(229,231,235,0.94);
+            line-height: 1.9;
+            margin-bottom: 18px;
+        }
+
+        .btn-game {
+            display: inline-flex;
+            background: #fbbf24;
+            color: #111827;
+            padding: 9px 20px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            box-shadow: 0 12px 26px rgba(251,191,36,0.5);
+            transition: all 0.22s ease;
+        }
+
+        .btn-game:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 32px rgba(251,191,36,0.7);
+        }
+
+        .btn-line-share {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 28px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #f9fafb;
+            background: var(--color-accent);
+            margin-top: 16px;
+            width: fit-content; 
+            align-self: center;
+            transition: all 0.22s ease;
+            box-shadow: 0 4px 12px rgba(0, 185, 0, 0.25);
+        }
+
+        .btn-line-share:hover {
+            background: #009900;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 153, 0, 0.35);
+        }
+
+        /* ========== Footer ========== */
+        .footer {
+            background: #111827;
+            color: rgba(249,250,251,0.82);
+            padding: 30px 0 40px;
+            margin-top: 40px;
+        }
+
+        .footer-inner {
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .footer-logo {
+            width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto 16px;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+        }
+
+        .footer-text {
+            line-height: 1.9;
+            margin-bottom: 14px;
+        }
+
+        .footer-share {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(249,250,251,0.4);
+            background: rgba(15,23,42,0.4);
+            color: #f9fafb;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .footer-share:hover {
+            background: rgba(15,23,42,0.7);
+        }
+
+        /* ========== 滾動動畫 ========== */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== Lightbox 影片視窗樣式 ========== */
+        .video-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .video-container {
+            width: min(90%, 800px);
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            font-size: 36px;
+            line-height: 1;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 101;
+            transition: color 0.2s;
+        }
+        
+        .close-modal:hover {
+            color: #fbbf24;
+        }
+
+        /* ========== 響應式 ========== */
+        @media (max-width: 960px) {
+            .experience-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
-            h1 .icon-right {
-                width: 75px;
-                height: 75px;
+
+            .games-container {
+                grid-template-columns: minmax(0, 1fr);
             }
-            .instructions { font-size: 1.2em; margin-bottom: 20px; }
-            .memory-game { max-width: 500px; gap: 16px; }
-            .card-face { border-radius: 20px; }
-            .btn { padding: 15px 40px 15px 80px; font-size: 1.3em; } 
-            .hero-logo { height: 90px; margin-right: -35px; } 
         }
 
+        @media (max-width: 768px) {
+            .nav-inner {
+                height: 60px;
+            }
+            
+            .nav-brand {
+                font-size: 18px;
+            }
+
+            .nav-links {
+                position: absolute;
+                inset: 60px 0 auto 0;
+                padding: 12px 0 14px;
+                background: radial-gradient(circle at top, rgba(15,23,42,0.97), rgba(15,23,42,0.94));
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+                display: none;
+                text-align: center;
+            }
+
+            .nav-links.is-open {
+                display: flex;
+            }
+
+            .nav-cta {
+                align-self: center;
+                text-align: center;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .hero-header {
+                margin-top: 60px;
+                min-height: 0;
+            }
+
+            .hero-content {
+                padding: 52px 0 52px;
+            }
+
+            .hero-badge {
+                top: 24%;
+            }
+
+            .hero-badge img {
+                width: 210px;
+            }
+
+            .hero-logo-panel {
+                padding: 110px 0 8px;
+            }
+
+            .hero-logo-main {
+                max-width: 100%;
+            }
+            
+            .hero-subtitle {
+                font-size: 16px;
+                margin-top: 14px;
+                padding: 0 10px;
+            }
+
+            .section {
+                padding: 56px 0;
+            }
+
+            .section-header {
+                margin-bottom: 28px;
+            }
+
+            .section-title {
+                font-size: 22px;
+            }
+
+            .section-description {
+                font-size: 14px;
+            }
+
+            .experience-grid {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 20px;
+            }
+
+            .experience-image {
+                height: 190px;
+            }
+
+            .experience-content {
+                padding: 16px 16px 14px;
+            }
+
+            .experience-title {
+                font-size: 16px;
+            }
+
+            .experience-text {
+                font-size: 14px;
+                margin-bottom: 12px;
+            }
+
+            .btn-watch,
+            .btn-share {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+
+            .game-card {
+                height: auto;
+                min-height: auto;
+            }
+
+            /* 確保手機版遊戲圖示正確置中 */
+            .game-icon {
+                font-size: 180px; 
+                inset: 0;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                position: absolute;
+            }
+
+            .game-content {
+                padding: 22px 18px 20px;
+            }
+
+            .game-title {
+                font-size: 16px;
+            }
+
+            .game-subtitle,
+            .game-description {
+                font-size: 14px;
+            }
+
+            .btn-game {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+
+            .btn-line-share {
+                font-size: 12px;
+                margin-top: 12px;
+            }
+
+            .footer {
+                padding: 26px 0 34px;
+            }
+
+            .footer-inner {
+                font-size: 12px;
+            }
+
+            .footer-share {
+                font-size: 11px;
+                padding: 7px 14px;
+            }
+            
+            .close-modal {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: min(100% - 24px, 480px);
+            }
+        }
     </style>
 </head>
 <body>
+    
+<svg style="display: none;">
+    <symbol id="icon-line-share" viewBox="0 0 24 24">
+        <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+    </symbol>
+</svg>
 
-    <div class="snow-container" id="snow-container"></div>
+<div id="top"></div>
 
-    <svg width="0" height="0" style="position:absolute;z-index:-1;">
-        <defs>
-            <symbol id="icon-moon" viewBox="0 0 100 100"><path d="M 95,50 A 45,45 0 1,1 50,5 A 30,30 0 1,0 95,50 Z" /></symbol>
-            <symbol id="icon-star" viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,96 50,75 21,96 32,62 2,40 39,40" /></symbol>
-            <symbol id="icon-sun" viewBox="0 0 100 100"><g fill="#E84A28"><g stroke="#E84A28" stroke-width="7" stroke-linecap="round"><line x1="50" y1="22" x2="50" y2="7"/><line x1="70" y1="30" x2="82" y2="18"/><line x1="78" y1="50" x2="93" y2="50"/><line x1="70" y1="70" x2="82" y2="82"/><line x1="50" y1="78" x2="50" y2="93"/><line x1="30" y1="70" x2="18" y2="82"/><line x1="22" y1="50" x2="7" y2="50"/><line x1="30" y1="30" x2="18" y2="18"/></g><circle cx="47" cy="48" r="23"/><circle cx="53" cy="52" r="23"/></g></symbol>
-            <symbol id="icon-heart" viewBox="0 0 100 100"><path d="M50,30 C20,0 0,25 0,45 C0,75 50,100 50,100 C50,100 100,75 100,45 C100,25 80,0 50,30 Z"/></symbol>
-            <symbol id="icon-tennis" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke-width="0"/><path d="M 15,35 C 40,65 60,45 85,75" stroke-width="8" stroke="white" fill="none" /></symbol>
-        </defs>
-    </svg>
+<div class="page-container">
+    <!-- 頂部導覽列 -->
+    <header class="site-nav">
+        <div class="container nav-inner">
+            <a href="#top" class="nav-brand">2026 寒修行專區</a>
 
-    <div class="main-wrapper">
-        <div class="game-container">
-            <h1>
-                <img src="brown_bear.png" alt="熊大圖示" class="title-icon icon-left">
-                點點心連心
-                <img src="cony_rabbit.png" alt="兔兔圖示" class="title-icon icon-right">
-            </h1>
-            <p class="instructions">翻出兩張相同圖，啟動一如心連心。</p>
-            <div class="memory-game" id="gameBoard"></div>
+            <nav>
+                <button class="nav-toggle" id="navToggle" aria-label="切換選單" aria-expanded="false">☰</button>
+                <div class="nav-links" id="navLinks">
+                    <a href="#experience">體驗談</a>
+                    <a href="#games">互動遊戲</a>
+                    <a href="#top" class="nav-cta">回首頁</a>
+                </div>
+            </nav>
         </div>
+    </header>
 
-        <div class="controls">
-            <button class="btn" onclick="location.reload()">
-                <span class="btn-content">
-                    <img src="hero-logo.gif" alt="集修行" class="hero-logo">
-                    立馬前行GOGOGO
-                </span>
-            </button>
-        </div>
-    </div>
+    <!-- Hero 區塊 -->
+    <section class="hero-header">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <div class="hero-badge">
+                <img src="2.png" alt="Shinnyo Logo">
+            </div>
 
-    <div class="modal" id="guidanceModal">
-        <div class="modal-content">
-            <div class="modal-icon"></div>
-            <div class="modal-header"><h3 id="modalTitle"></h3></div>
-            <div class="modal-message-container" id="guidanceMessage"></div>
-            <button class="modal-button" id="closeModalBtn">立馬前行GoGoGo</button>
-        </div>
-    </div>
-
-    <script>
-        const gameBoard = document.getElementById('gameBoard');
-        const modal = document.getElementById('guidanceModal');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const modalTitleEl = document.getElementById('modalTitle');
-        const guidanceMessageEl = document.getElementById('guidanceMessage');
-
-        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
-        let mahayanaData = [];
-        
-        const baseCards = [
-            { name: 'star-green', svgId: 'icon-star' },
-            { name: 'moon-pink', svgId: 'icon-moon' },
-            { name: 'heart-orange', svgId: 'icon-heart' },
-            { name: 'sun-red', svgId: 'icon-sun' },
-            { name: 'star-blue', svgId: 'icon-star' },
-            { name: 'tennis-ball', svgId: 'icon-tennis' },
-            { name: 'star-green', svgId: 'icon-star' },
-            { name: 'moon-pink', svgId: 'icon-moon' }
-        ];
-
-        let gameCards = [];
-        let selectedCards = [];
-        let lockBoard = false;
-
-        async function loadSheetData() {
-            try {
-                const response = await fetch(CSV_URL);
-                if (!response.ok) throw new Error('網路回應錯誤');
-                const csvText = await response.text();
-                const messages = csvText.split('\n').slice(1).map(line => line.trim().replace(/^"|"$/g, '')).filter(line => line);
-                if (messages.length > 0) { mahayanaData = messages; } else { throw new Error('CSV 檔案為空'); }
-            } catch (error) {
-                console.error('資料載入失敗:', error);
-                mahayanaData = ["(提醒) 資料載入失敗，請檢查網路連線。", "(祝福) 願您的每一天都充滿平靜與喜悅。"];
-            }
-        }
-
-        function getSurroundingIndices(idx) {
-            const row = Math.floor(idx / 4);
-            const col = idx % 4;
-            let forbidden = [];
-            
-            for (let r = row - 1; r <= row + 1; r++) {
-                for (let c = col - 1; c <= col + 1; c++) {
-                    if (r >= 0 && r < 4 && c >= 0 && c < 4) {
-                        const neighborIdx = r * 4 + c;
-                        if (neighborIdx !== idx) {
-                            forbidden.push(neighborIdx);
-                        }
-                    }
-                }
-            }
-            return forbidden;
-        }
-
-        function distributeCards(uniqueTypes) {
-            let board = new Array(16).fill(null);
-            let availableIndices = Array.from({ length: 16 }, (_, i) => i);
-            
-            let typesToPlace = [...uniqueTypes].sort(() => 0.5 - Math.random());
-
-            typesToPlace.forEach(type => {
-                if (availableIndices.length === 0) return;
-                
-                const rand1 = Math.floor(Math.random() * availableIndices.length);
-                const pos1 = availableIndices[rand1];
-                
-                board[pos1] = type;
-                availableIndices.splice(rand1, 1);
-
-                const neighbors = getSurroundingIndices(pos1);
-                let candidates = availableIndices.filter(idx => !neighbors.includes(idx));
-                
-                if (candidates.length === 0) {
-                    candidates = availableIndices;
-                }
-
-                const rand2 = Math.floor(Math.random() * candidates.length);
-                const pos2 = candidates[rand2];
-
-                board[pos2] = type;
-                
-                const removeIdx = availableIndices.indexOf(pos2);
-                availableIndices.splice(removeIdx, 1);
-            });
-
-            return board;
-        }
-
-        function createBoard() {
-            gameCards = distributeCards(baseCards);
-            
-            gameBoard.innerHTML = '';
-            selectedCards = [];
-            lockBoard = false;
-
-            gameCards.forEach((item, index) => { 
-                const card = document.createElement('div');
-                card.classList.add('memory-card');
-                card.dataset.card = item.name;
-
-                card.innerHTML = `
-                    <div class="card-face front-face">
-                        <svg><use xlink:href="#${item.svgId}"></use></svg>
+            <div class="hero-layout">
+                <div>
+                    <h1 class="hero-title">2026 寒修行專區：以真如之修行「步」向世界及未來</h1>
+                    <div class="hero-logo-panel">
+                        <div class="hero-logo-main">
+                            <img src="hero-logo.png" alt="2026 寒修行主題標誌">
+                        </div>
+                        <h2 class="hero-subtitle">以真如之修行「步」向世界及未來</h2>
                     </div>
-                    <div class="card-face back-face">
-                        <img src="stepogo.png" class="card-back-icon" alt="Step Logo">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <!-- 小小炭火體驗談 -->
+        <section class="section experience-section" id="experience">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <div class="section-eyebrow">STORIES</div>
+                    <h2 class="section-title">小小炭火體驗談</h2>
+                    <p class="section-description">
+                        聆聽真實的修行故事，感受生命在寒修行中的細微轉變，
+                        讓一顆顆不起眼的小炭火，點亮自己與他人的道路。
+                    </p>
+                </div>
+
+                <div class="experience-grid">
+                    <article class="experience-item fade-up">
+                        <img src="https://i.ytimg.com/vi/wFYjIoSus-k/maxresdefault.jpg"
+                             alt="蛻變"
+                             loading="lazy"
+                             class="experience-image">
+                        <div class="experience-content">
+                            <div class="experience-tag">EPISODE 01</div>
+                            <h3 class="experience-title">蛻變</h3>
+                            <p class="experience-text">
+                                從蛹到蝴蝶，經歷生命的質變。
+                                在寒修行中，透過一次次面對與調整，見證心靈綻放與重新起步。
+                            </p>
+                            <div class="experience-actions">
+                                <a href="https://youtu.be/wFYjIoSus-k"
+                                   class="btn btn-watch">
+                                    觀看影片
+                                </a>
+                                <a href="https://social-plugins.line.me/lineit/share?url=https://youtu.be/wFYjIoSus-k"
+                                   target="_blank"
+                                   class="btn btn-share">
+                                   <svg class="icon-svg"><use href="#icon-line-share"></use></svg>
+                                    分享
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="experience-item fade-up">
+                        <img src="https://i.ytimg.com/vi/2RSzUeDaEtM/maxresdefault.jpg"
+                             alt="迎接"
+                             loading="lazy"
+                             class="experience-image">
+                        <div class="experience-content">
+                            <div class="experience-tag">EPISODE 02</div>
+                            <h3 class="experience-title">迎接</h3>
+                            <p class="experience-text">
+                                以開放的心迎接每個當下，在修行中學習放下與承接，
+                                在不完美的現實裡，找到內在真正的平靜與喜悅。
+                            </p>
+                            <div class="experience-actions">
+                                <a href="https://www.youtube.com/watch?v=2RSzUeDaEtM"
+                                   class="btn btn-watch">
+                                    觀看影片
+                                </a>
+                                <a href="https://social-plugins.line.me/lineit/share?url=https://www.youtube.com/watch?v=2RSzUeDaEtM"
+                                   target="_blank"
+                                   class="btn btn-share">
+                                   <svg class="icon-svg"><use href="#icon-line-share"></use></svg>
+                                    分享
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="experience-item fade-up">
+                        <img src="https://i.ytimg.com/vi/8NYM-ma2ZLU/maxresdefault.jpg"
+                             alt="修行生活"
+                             loading="lazy"
+                             class="experience-image">
+                        <div class="experience-content">
+                            <div class="experience-tag">EPISODE 03</div>
+                            <h3 class="experience-title">修行生活</h3>
+                            <p class="experience-text">
+                                在忙碌與壓力之中，學會以修行的觀點重新看待每一天。
+                                改變、希望與樂觀，成為支持自己與他人的溫暖底氣。
+                            </p>
+                            <div class="experience-actions">
+                                <a href="https://www.youtube.com/watch?v=8NYM-ma2ZLU"
+                                   class="btn btn-watch">
+                                    觀看影片
+                                </a>
+                                <a href="https://social-plugins.line.me/lineit/share?url=https://www.youtube.com/watch?v=8NYM-ma2ZLU"
+                                   target="_blank"
+                                   class="btn btn-share">
+                                   <svg class="icon-svg"><use href="#icon-line-share"></use></svg>
+                                    分享
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 燈檠山互動遊戲 -->
+        <section class="section games-section" id="games">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <div class="section-eyebrow">INTERACTIVE</div>
+                    <h2 class="section-title">燈檠山互動遊戲</h2>
+                    <p class="section-description">
+                        透過簡單、有趣又充滿意義的線上互動，
+                        在遊戲中加深與常住的連結，讓寒修行的感動不只停留在一天，而是延續到每一次點擊。
+                    </p>
+                </div>
+
+                <div class="games-container">
+                    <div class="game-wrapper fade-up">
+                        <div class="game-card">
+                            <div class="game-icon game-icon-heart">💖</div>
+                            <div class="game-content">
+                                <h3 class="game-title">點點心連心</h3>
+                                <div class="game-subtitle">每天一點點，累積成一座溫暖的心燈</div>
+                                <p class="game-description">
+                                    透過線上點擊，紀錄自己一點一滴的利他與感恩。
+                                    每一個小小的「點」，都是心與心之間的呼應，
+                                    也是對寒修行願心的再次確認。
+                                </p>
+                                <a href="https://angewoo.github.io/wt_2026/"
+                                   target="_blank"
+                                   class="btn-game">
+                                    立即體驗
+                                </a>
+                            </div>
+                        </div>
+                        <a href="https://social-plugins.line.me/lineit/share?url=https://angewoo.github.io/wt_2026/"
+                           target="_blank"
+                           class="btn-line-share">
+                            <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
+                            分享遊戲
+                        </a>
                     </div>
-                `;
-                
-                let handled = false;
 
-                const triggerFlip = (e) => {
-                    if (e.type === 'click' && handled) {
-                        handled = false; 
-                        return;
-                    }
-                    
-                    if (e.type === 'touchend') {
-                        handled = true;
-                        setTimeout(() => { handled = false; }, 300);
-                    }
+                    <div class="game-wrapper fade-up">
+                        <div class="game-card">
+                            <div class="game-icon game-icon-crystal">🔮</div>
+                            <div class="game-content">
+                                <h3 class="game-title">歡修行扭蛋機</h3>
+                                <div class="game-subtitle">一轉之間，收下來自常住的溫柔提醒</div>
+                                <p class="game-description">
+                                    轉動扭蛋機，隨機獲得一句話、一個提問或一個練習，
+                                    在日常中「玩」出新發現。每一顆扭蛋，都承載著
+                                    只屬於當下的祝福與啟發。
+                                </p>
+                                <a href="https://angewoo.github.io/wt_2025/"
+                                   target="_blank"
+                                   class="btn-game">
+                                    立即體驗
+                                </a>
+                            </div>
+                        </div>
+                        <a href="https://social-plugins.line.me/lineit/share?url=https://angewoo.github.io/wt_2025/"
+                           target="_blank"
+                           class="btn-line-share">
+                            <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
+                            分享遊戲
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-                    handleCardClick(card);
-                };
-
-                card.addEventListener('touchend', triggerFlip, { passive: false });
-                card.addEventListener('click', triggerFlip);
-
-                gameBoard.appendChild(card);
-            });
-        }
-        
-        function handleCardClick(card) {
-            if (lockBoard || card.classList.contains('is-flipped') || selectedCards.length >= 2) return;
-
-            card.classList.add('is-flipped');
-            selectedCards.push(card);
-
-            if (selectedCards.length === 2) {
-                lockBoard = true;
-                checkForMatch();
-            }
-        }
-
-        function checkForMatch() {
-            const [card1, card2] = selectedCards;
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <img src="horse-logo.png" alt="2026 Year of the Horse" class="footer-logo">
             
-            const isMatch = card1.dataset.card === card2.dataset.card;
+            <p class="footer-text">
+                © 2026 寒修行專區<br>
+                以真如之修行「步」向世界及未來
+            </p>
+            <!-- 連結保持預設，JavaScript 會自動將其替換為當前網址 -->
+            <a href="https://social-plugins.line.me/lineit/share?url=https://flowtest.jean.com.tw/test50/index.html"
+               target="_blank"
+               class="footer-share">
+               <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
+                分享此頁面
+            </a>
+        </div>
+    </footer>
+</div>
 
-            if (isMatch) {
-                setTimeout(showGuidance, 600);
-            } else {
-                setTimeout(unflipCards, 1500);
-            }
-        }
+<div class="video-modal" id="videoModal" aria-hidden="true">
+    <button class="close-modal" id="closeModal" aria-label="關閉影片">×</button>
+    <div class="video-container">
+        <iframe id="videoFrame" src="" allow="autoplay; encrypted-media" allowfullscreen title="影片播放器"></iframe>
+    </div>
+</div>
 
-        function unflipCards() {
-            selectedCards.forEach(card => card.classList.remove('is-flipped'));
-            selectedCards = [];
-            lockBoard = false;
-        }
-        
-        function showGuidance() {
-            const allCards = document.querySelectorAll('.memory-card');
-            allCards.forEach(card => card.classList.add('is-flipped'));
+<script>
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
 
-            setTimeout(() => {
-                if (mahayanaData.length < 1) {
-                    modalTitleEl.textContent = '提醒';
-                    guidanceMessageEl.textContent = '資料不足，無法提供指引。';
-                } else {
-                    const randomMessage = mahayanaData[Math.floor(Math.random() * mahayanaData.length)];
-                    const match = randomMessage.match(/\(([^)]+)\)(.*)/s); 
-                    if (match && match[1] && match[2]) {
-                        modalTitleEl.textContent = `(摘錄自) ${match[1].trim()}`;
-                        guidanceMessageEl.innerHTML = match[2].trim().replace(/\n/g, '<br>');
-                    } else {
-                        modalTitleEl.textContent = '修行指引';
-                        guidanceMessageEl.innerHTML = randomMessage.trim().replace(/\n/g, '<br>');
-                    }
-                }
-                modal.classList.add('show');
-            }, 500);
-        }
-
-        function closeModal() {
-            modal.classList.remove('show');
-            setTimeout(startNewGame, 300);
-        }
-
-        function startNewGame() {
-            createBoard();
-        }
-
-        function createSnowflakes() {
-            const container = document.getElementById('snow-container');
-            if (!container) return;
-            
-            const isMobile = window.innerWidth < 480;
-            const snowflakeCount = isMobile ? 40 : 150; 
-            
-            let snowflakesHTML = '';
-            for (let i = 0; i < snowflakeCount; i++) {
-                const size = Math.random() * 12 + 8; 
-                const left = Math.random() * 100;
-                const duration = Math.random() * 10 + 5;
-                const delay = Math.random() * 10;
-                const opacity = Math.random() * 0.5 + 0.4; 
-                
-                /* --- 修改：完全移除 blur 運算 --- */
-                
-                snowflakesHTML += `<div class="snowflake" style="
-                    width:${size}px; 
-                    height:${size}px; 
-                    left:${left}%; 
-                    animation-duration:${duration}s; 
-                    animation-delay:${delay}s;
-                    opacity:${opacity};
-                "></div>`;
-            }
-            container.innerHTML = snowflakesHTML;
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            startNewGame();
-            loadSheetData();
-            createSnowflakes();
-            
-            document.addEventListener('gesturestart', (event) => event.preventDefault(), { passive: false });
-            document.addEventListener('wheel', (event) => { if (event.ctrlKey) event.preventDefault(); }, { passive: false });
-            document.body.addEventListener('touchstart', (e) => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
-            document.body.addEventListener('touchmove', (e) => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', () => {
+            const isOpened = navLinks.classList.toggle('is-open');
+            navToggle.setAttribute('aria-expanded', isOpened);
         });
 
-        closeModalBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('is-open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
 
-    </script>
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); 
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-up').forEach(element => {
+        observer.observe(element);
+    });
+
+    const modal = document.getElementById('videoModal');
+    const iframe = document.getElementById('videoFrame');
+    const closeBtn = document.getElementById('closeModal');
+
+    document.querySelectorAll('.btn-watch').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault(); 
+            const url = this.href;
+            let videoId = '';
+
+            if(url.includes('youtu.be')) {
+                videoId = url.split('youtu.be/')[1];
+            } else if (url.includes('v=')) {
+                videoId = url.split('v=')[1].split('&')[0];
+            }
+
+            if (videoId) {
+                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+                modal.classList.add('active');
+                modal.setAttribute('aria-hidden', 'false');
+            }
+        });
+    });
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        iframe.src = ''; 
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    // 自動更新 Footer 分享按鈕的連結為當前頁面網址
+    const footerShareBtn = document.querySelector('.footer-share');
+    if (footerShareBtn) {
+        const currentUrl = encodeURIComponent(window.location.href);
+        footerShareBtn.href = `https://social-plugins.line.me/lineit/share?url=${currentUrl}`;
+    }
+</script>
 </body>
 </html>
