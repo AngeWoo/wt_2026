@@ -23,6 +23,7 @@
             --bg-gradient-end: #FAD6BB;
             
             /* --- 修正：卡片區背景調深 --- */
+            /* 原本是 #FFFDF9 (太白)，現在改為 #FFF6E6 (暖奶油色)，讓白色邊框更明顯 */
             --container-bg: #FFF6E6;      
             
             --container-border: #FFFFFF;
@@ -38,7 +39,7 @@
             --modal-bg: #FFF6E6;
             --modal-content-bg: #FFFFFF;
             --modal-accent: #C8F0EE;
-            --modal-title-text: #8B7061; /* 這是標題文字顏色 */
+            --modal-title-text: #8B7061;
             --modal-text: #707070;
             --modal-border: #F0E6D8;
         }
@@ -412,15 +413,13 @@
         }
         .modal.show .modal-content { transform: scale(1); }
         
-        /* --- 修改：圖示背景色與標題文字顏色相同 --- */
         .modal-icon {
             width: 120px; height: 120px; margin: -20px auto 20px;
-            background-color: var(--modal-title-text); /* 改為棕色 */
+            background-color: var(--modal-accent);
             -webkit-mask-image: url(slogo.png); mask-image: url(slogo.png);
             -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat;
             mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;
         }
-
         .modal-header h3 { font-size: 26px; color: var(--modal-title-text); font-weight: bold; margin-bottom: 25px; }
         
         .modal-message-container {
@@ -431,10 +430,9 @@
             border-radius: 15px;
         }
 
-        /* --- 修改：按鈕背景色與標題文字顏色相同，文字改為白色 --- */
         .modal-button {
-            background: var(--modal-title-text); /* 改為棕色 */
-            color: #FFFFFF; /* 文字改為白色 */
+            background: var(--modal-accent); 
+            color: #666; 
             border: none; padding: 16px 50px;
             font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%; max-width: 300px;
             display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -719,6 +717,8 @@
                 const duration = Math.random() * 10 + 5;
                 const delay = Math.random() * 10;
                 const opacity = Math.random() * 0.5 + 0.4; 
+                
+                /* --- 修改：完全移除 blur 運算 --- */
                 
                 snowflakesHTML += `<div class="snowflake" style="
                     width:${size}px; 
