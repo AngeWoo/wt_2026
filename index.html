@@ -77,11 +77,11 @@
 
         .snowflake {
             position: absolute;
-            background: rgba(255, 255, 255, 0.9); /* 提高不透明度，讓雪更明顯 */
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 50%;
             animation: snowfall linear infinite;
             opacity: 0;
-            box-shadow: 0 0 8px rgba(255,255,255,0.6); /* 增加光暈 */
+            box-shadow: 0 0 8px rgba(255,255,255,0.6);
         }
 
         @keyframes snowfall {
@@ -152,15 +152,27 @@
             line-height: 1;
         }
         
-        /* --- 修改：圖示尺寸變大 --- */
         h1 .title-icon {
-            width: 80px;  /* 電腦版加大 */
-            height: 80px;
-            margin: 0 10px;
+            margin: 0 8px;
             filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
             display: inline-block;
             position: relative;
-            top: 2px;
+            /* 移除統一的寬高，改由個別 class 控制 */
+        }
+        
+        /* --- 修改：左側圖示加大 --- */
+        h1 .icon-left {
+            width: 110px;  /* 電腦版 */
+            height: 110px;
+            top: 5px;
+        }
+        
+        /* --- 修改：右側圖示縮小 --- */
+        h1 .icon-right {
+            width: 55px;   /* 電腦版 */
+            height: 55px;
+            top: 0;
+            opacity: 0.8; /* 稍微淡一點，增加層次 */
         }
 
         @media (max-width: 480px) {
@@ -169,13 +181,19 @@
                 margin-bottom: 30px; 
                 font-weight: normal; 
             }
-            /* --- 修改：手機版圖示尺寸變大 --- */
-            h1 .title-icon {
-                width: 65px;  /* 手機版加大 */
-                height: 65px;
-                display: inline-block;
-                position: relative;
-                top: 2px;
+            
+            /* --- 修改：手機版左側圖示 --- */
+            h1 .icon-left {
+                width: 85px;   /* 手機版加大 */
+                height: 85px;
+                margin-right: 5px;
+            }
+            
+            /* --- 修改：手機版右側圖示 --- */
+            h1 .icon-right {
+                width: 40px;   /* 手機版縮小 */
+                height: 40px;
+                margin-left: 5px;
             }
         }
         
@@ -416,9 +434,14 @@
             .main-wrapper { max-width: 650px; gap: 0; } 
             .game-container { padding: 40px; border-radius: 30px; margin-bottom: 35px; }
             h1 { font-size: 3.2em; margin-bottom: 20px; }
-            h1 .title-icon {
-                width: 90px; /* 電腦版對應放大 */
-                height: 90px;
+            /* --- 修改：電腦版圖示尺寸同步調整 --- */
+            h1 .icon-left {
+                width: 110px;
+                height: 110px;
+            }
+            h1 .icon-right {
+                width: 60px;
+                height: 60px;
             }
             .instructions { font-size: 1.2em; margin-bottom: 40px; }
             .memory-game { max-width: 500px; gap: 16px; }
@@ -446,9 +469,9 @@
     <div class="main-wrapper">
         <div class="game-container">
             <h1>
-                <img src="brown_bear.png" alt="熊大圖示" class="title-icon">
+                <img src="brown_bear.png" alt="熊大圖示" class="title-icon icon-left">
                 點點心連心
-                <img src="cony_rabbit.png" alt="兔兔圖示" class="title-icon">
+                <img src="cony_rabbit.png" alt="兔兔圖示" class="title-icon icon-right">
             </h1>
             <p class="instructions">翻出兩張相同圖，啟動一如心連心。</p>
             <div class="memory-game" id="gameBoard"></div>
@@ -494,8 +517,7 @@
             { name: 'moon-pink', svgId: 'icon-moon' }
         ];
 
-        let gameCards = [...baseCards, ...baseCards]; 
-
+        let gameCards = [];
         let selectedCards = [];
         let lockBoard = false;
 
@@ -512,12 +534,75 @@
             }
         }
 
-        function shuffle(array) {
-            array.sort(() => 0.5 - Math.random());
+        // 取得某個位置周圍的所有位置 (上下左右 + 對角線)
+        function getSurroundingIndices(idx) {
+            const row = Math.floor(idx / 4);
+            const col = idx % 4;
+            let forbidden = [];
+            
+            // 檢查九宮格範圍
+            for (let r = row - 1; r <= row + 1; r++) {
+                for (let c = col - 1; c <= col + 1; c++) {
+                    if (r >= 0 && r < 4 && c >= 0 && c < 4) {
+                        const neighborIdx = r * 4 + c;
+                        if (neighborIdx !== idx) {
+                            forbidden.push(neighborIdx);
+                        }
+                    }
+                }
+            }
+            return forbidden;
+        }
+
+        // 新的分散洗牌邏輯
+        function distributeCards(uniqueTypes) {
+            let board = new Array(16).fill(null);
+            let availableIndices = Array.from({ length: 16 }, (_, i) => i);
+            
+            // 隨機打亂要放置的圖案順序
+            let typesToPlace = [...uniqueTypes].sort(() => 0.5 - Math.random());
+
+            typesToPlace.forEach(type => {
+                // 1. 隨機選擇第一張卡片的位置
+                if (availableIndices.length === 0) return;
+                
+                const rand1 = Math.floor(Math.random() * availableIndices.length);
+                const pos1 = availableIndices[rand1];
+                
+                // 放置第一張
+                board[pos1] = type;
+                availableIndices.splice(rand1, 1);
+
+                // 2. 尋找第二張卡片的位置 (儘量避開周圍)
+                const neighbors = getSurroundingIndices(pos1);
+                
+                // 篩選出不在周圍的可用位置
+                let candidates = availableIndices.filter(idx => !neighbors.includes(idx));
+                
+                // 如果沒有好位置 (空間太擁擠)，則退而求其次選擇任意可用位置
+                if (candidates.length === 0) {
+                    candidates = availableIndices;
+                }
+
+                // 隨機選擇第二張的位置
+                const rand2 = Math.floor(Math.random() * candidates.length);
+                const pos2 = candidates[rand2];
+
+                // 放置第二張
+                board[pos2] = type;
+                
+                // 從可用列表中移除
+                const removeIdx = availableIndices.indexOf(pos2);
+                availableIndices.splice(removeIdx, 1);
+            });
+
+            return board;
         }
 
         function createBoard() {
-            shuffle(gameCards);
+            // 使用新的分散演算法生成盤面
+            gameCards = distributeCards(baseCards);
+            
             gameBoard.innerHTML = '';
             selectedCards = [];
             lockBoard = false;
@@ -606,15 +691,15 @@
         function createSnowflakes() {
             const container = document.getElementById('snow-container');
             if (!container) return;
-            const snowflakeCount = 150; // 增加數量到 150，製造大雪感
+            const snowflakeCount = 150; 
             let snowflakesHTML = '';
             for (let i = 0; i < snowflakeCount; i++) {
-                const size = Math.random() * 12 + 8; // 尺寸變大：8px ~ 20px
+                const size = Math.random() * 12 + 8; 
                 const left = Math.random() * 100;
-                const duration = Math.random() * 10 + 5; // 速度稍快
+                const duration = Math.random() * 10 + 5;
                 const delay = Math.random() * 10;
-                const opacity = Math.random() * 0.5 + 0.4; // 透明度變化
-                const blur = Math.random() < 0.5 ? 0 : 2; // 部分雪花模糊，增加景深感
+                const opacity = Math.random() * 0.5 + 0.4; 
+                const blur = Math.random() < 0.5 ? 0 : 2; 
                 
                 snowflakesHTML += `<div class="snowflake" style="
                     width:${size}px; 
