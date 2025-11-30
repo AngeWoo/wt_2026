@@ -18,29 +18,23 @@
         }
         
         :root {
-            /* --- 修正：背景維持暖色漸層 --- */
+            /* --- 原有變數 (保留給遊戲主體使用) --- */
             --bg-gradient-start: #FFF8F0;
             --bg-gradient-end: #FAD6BB;
-            
-            /* --- 修正：卡片區背景調深 --- */
             --container-bg: #FFF6E6;      
-            
             --container-border: #FFFFFF;
             --container-shadow: rgba(245, 200, 180, 0.5);
-            
             --text-primary: #8B7061;
             --text-secondary: #BCAAA4;
-            
             --btn-bg: #C8F0EE;
             --btn-text: #707070;
             
-            /* Modal 同步加深 */
-            --modal-bg: #FFF6E6;
-            --modal-content-bg: #FFFFFF;
-            --modal-accent: #C8F0EE;
-            --modal-title-text: #8B7061; /* 這是標題文字顏色 */
-            --modal-text: #707070;
-            --modal-border: #F0E6D8;
+            /* --- 新增：來自 25.html 的 Modal 專用主題色 --- */
+            --theme-bg: #fdfaf6;
+            --theme-content-bg: #f7f0e8;
+            --theme-accent: #c89f70;
+            --theme-text: #5c5248;
+            --theme-border: #e0d9d1;
         }
 
         * {
@@ -393,57 +387,156 @@
                 box-shadow: 0 8px 20px rgba(180, 230, 230, 0.6);
             }
         }
-        
+
+        /* --- START MODAL STYLES (Copied and Adapted from 25.html) --- */
         .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(80, 60, 50, 0.4); backdrop-filter: blur(4px);
-            z-index: 1000; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease; padding: 20px;
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
             touch-action: manipulation;
         }
-        .modal.show { display: flex; opacity: 1; }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
         .modal-content {
-            background: var(--modal-bg); border-radius: 25px; padding: 25px 30px 30px;
-            max-width: 480px; width: 100%; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            position: relative; text-align: center;
-            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-            border: 3px solid #fff;
-        }
-        .modal.show .modal-content { transform: scale(1); }
-        
-        /* --- 修改：圖示背景色與標題文字顏色相同 --- */
-        .modal-icon {
-            width: 120px; height: 120px; margin: -20px auto 20px;
-            background-color: var(--modal-title-text); /* 改為棕色 */
-            -webkit-mask-image: url(slogo.png); mask-image: url(slogo.png);
-            -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;
+            background: var(--theme-bg);
+            border: 1px solid var(--theme-border);
+            border-radius: 25px;
+            padding: clamp(25px, 6vw, 40px);
+            max-width: min(90vw, 500px);
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: visible;
+            text-align: center;
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .modal-header h3 { font-size: 26px; color: var(--modal-title-text); font-weight: bold; margin-bottom: 25px; }
-        
-        .modal-message-container {
-            font-size: 20px; line-height: 1.8; color: var(--modal-text);
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .modal-logo {
+            width: 90px;
+            height: 90px;
+            margin: -70px auto 10px;
+            display: block;
+            position: relative;
+            z-index: 100;
+            
+            background-color: var(--theme-accent);
+            -webkit-mask-image: url(slogo.png);
+            mask-image: url(slogo.png);
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .modal-header h3 {
+            font-size: clamp(22px, 5vw, 32px);
+            color: var(--theme-accent);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            font-weight: bold;
+        }
+
+        .modal-message {
+            font-size: clamp(18px, 4vw, 22px);
+            line-height: 1.8;
+            color: var(--theme-text);
             text-align: left;
-            margin-bottom: 30px; padding: 25px;
-            background: var(--modal-content-bg); border: 1px solid var(--modal-border);
+            margin: 25px 0;
+            padding: 20px;
+            background: var(--theme-content-bg);
+            border: 1px solid var(--theme-border);
             border-radius: 15px;
+            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.04);
         }
 
-        /* --- 修改：按鈕背景色與標題文字顏色相同，文字改為白色 --- */
         .modal-button {
-            background: var(--modal-title-text); /* 改為棕色 */
-            color: #FFFFFF; /* 文字改為白色 */
-            border: none; padding: 16px 50px;
-            font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%; max-width: 300px;
-            display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: box-shadow 0.3s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-        }
-        @media (hover: hover) and (pointer: fine) {
-            .modal-button:hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); }
+            background: var(--theme-accent);
+            color: white;
+            border: none;
+            padding: clamp(14px, 3.5vw, 18px) clamp(35px, 8vw, 50px);
+            font-size: clamp(16px, 4vw, 20px);
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
         }
 
+        .modal-button:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); 
+        }
+        .modal-button:active { 
+            transform: translateY(0); 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); 
+        }
+
+        /* Large Screen adjustment from 25.html */
+        @media (min-width: 992px) {
+            .modal-content {
+                max-width: 600px;
+                padding: 50px;
+            }
+            .modal-logo {
+                width: 100px;
+                height: 100px;
+                margin-top: -90px;
+            }
+            .modal-header h3 {
+                font-size: 36px;
+            }
+            .modal-message {
+                font-size: 24px;
+            }
+            .modal-button {
+                font-size: 22px;
+                padding: 20px 60px;
+            }
+        }
+        
         @media (min-width: 768px) {
             .main-wrapper { max-width: 650px; gap: 0; } 
             .game-container { padding: 40px; border-radius: 30px; margin-bottom: 15px; }
@@ -462,6 +555,7 @@
             .btn { padding: 15px 40px 15px 80px; font-size: 1.3em; } 
             .hero-logo { height: 90px; margin-right: -35px; } 
         }
+        /* --- END MODAL STYLES --- */
 
     </style>
 </head>
@@ -500,11 +594,14 @@
         </div>
     </div>
 
+    <!-- Modified Modal Structure to match 25.html -->
     <div class="modal" id="guidanceModal">
         <div class="modal-content">
-            <div class="modal-icon"></div>
-            <div class="modal-header"><h3 id="modalTitle"></h3></div>
-            <div class="modal-message-container" id="guidanceMessage"></div>
+            <div class="modal-header">
+                <div class="modal-logo"></div>
+                <h3 id="modalTitle"></h3>
+            </div>
+            <div class="modal-message" id="guidanceMessage"></div>
             <button class="modal-button" id="closeModalBtn">立馬前行GoGoGo</button>
         </div>
     </div>
